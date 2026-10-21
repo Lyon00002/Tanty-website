@@ -39,12 +39,14 @@ export function SunPath({ items }: { items: Milestone[] }) {
         const { wide, motion } = ctx.conditions ?? {};
         if (!el || !motion) return;
         // The path follows the scroll (both ways, so at every visit): the arc across on wide
-        // screens, the dotted line down on small ones (its pen at 75% of the screen's height).
+        // screens, from the moment the path enters the screen until its top reaches 45 % of it
+        // (all of it in view); the dotted line down on small ones, its pen at 88 % of the
+        // screen's height, so each step lights up as soon as it shows.
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: wide
-            ? { trigger: el, start: "top 80%", end: "bottom 55%", scrub: 0.6 }
-            : { trigger: el, start: "top 75%", end: "bottom 75%", scrub: 0.6 },
+            ? { trigger: el, start: "top bottom", end: "top 45%", scrub: 0.6 }
+            : { trigger: el, start: "top 88%", end: "bottom 88%", scrub: 0.6 },
         });
         tl.fromTo(el.querySelector("[data-arc]"), { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1 }, 0).fromTo(
           el,

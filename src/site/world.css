@@ -667,24 +667,37 @@ a:focus-visible > .nid-bubble {
 
 /* "À l'affiche": cards laid one on the other, in 3D.
    --h: the scroll each card owns (its wrapper, one screen under the bar);
+   --card: the card's height, centred in that screen once stuck;
    --top: where the cards stick; --step: how far each card sits below the
-   previous one, so the edges of the pile show. */
+   previous one, so the edges of the pile show. The pile is pulled up by
+   the empty half-band above the first card, so that card arrives right
+   under the section's text instead of half a screen lower. */
 .nid-stack {
   --h: calc(100svh - 4rem);
+  --card: calc(100svh - 6.5rem);
   --top: 4rem;
   --step: 12px;
+  margin-top: calc((var(--h) - var(--card)) / -2);
   overflow-x: clip;
 }
 
 @media (min-width: 640px) {
   .nid-stack {
     --h: calc(100svh - 5rem);
+    --card: calc(100svh - 7.5rem);
     --top: 5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .nid-stack {
+    --card: min(44rem, calc(100svh - 7.5rem));
   }
 }
 
 @media (min-width: 1024px) {
   .nid-stack {
+    --card: min(40rem, calc(100svh - 11rem));
     --step: 24px;
   }
 }

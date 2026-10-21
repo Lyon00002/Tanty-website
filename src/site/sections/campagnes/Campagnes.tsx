@@ -98,7 +98,7 @@ export function Campagnes() {
 
   return (
     <section id="campagnes" aria-labelledby="nid-campaigns-title" className="nid-on-white relative scroll-mt-20">
-      <div className="nid-wrap pb-12 pt-20 lg:pb-16 lg:pt-24">
+      <div className="nid-wrap pb-10 pt-20 lg:pb-12 lg:pt-24">
         <h2 data-reveal="" id="nid-campaigns-title" className="nid-title">
           À l&apos;affiche
           <span className="nid-dot">.</span>
@@ -131,16 +131,17 @@ export function Campagnes() {
           return (
             <div
               key={c.range}
-              className="pointer-events-none sticky top-16 flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center px-3 sm:top-20 sm:min-h-[calc(100svh-5rem)] sm:px-6 lg:px-8"
+              className="pointer-events-none sticky top-16 flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center sm:top-20 sm:min-h-[calc(100svh-5rem)]"
               style={{ zIndex: k + 1 }}
             >
-              <div className="mx-auto w-full max-w-7xl">
+              {/* As wide as the section's content: only its side padding around (as the title above) */}
+              <div className="nid-wrap">
                 {/* Lands on the pile along its own approach */}
                 <div data-land="" className="nid-stack-land" style={{ "--k": k, animationTimeline: rise(k) } as CSSProperties}>
                     <Link
                       href={href}
                       aria-label={`${c.alt} Voir les produits ${range.name}.`}
-                      className="pointer-events-auto relative block h-[calc(100svh-6.5rem)] overflow-hidden rounded-2xl bg-[var(--nid-green-deep)] shadow-xl sm:h-[calc(100svh-7.5rem)] md:h-[min(44rem,calc(100svh-7.5rem))] lg:h-[min(40rem,calc(100svh-11rem))] lg:rounded-3xl lg:shadow-2xl"
+                      className="pointer-events-auto relative block h-[var(--card)] overflow-hidden rounded-2xl bg-[var(--nid-green-deep)] shadow-xl lg:rounded-3xl lg:shadow-2xl"
                     >
                       {/* Phone: the portrait visual fills the card when there is one */}
                       {c.srcMobile && (
