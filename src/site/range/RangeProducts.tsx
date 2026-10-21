@@ -20,8 +20,7 @@ export function RangeProducts({ range }: { range: Category }) {
     <section id="produits" aria-labelledby="nid-range-products" className="nid-on-white scroll-mt-24 pb-20 pt-14 lg:pb-28 lg:pt-20">
       <div className="nid-wrap">
         <h2 data-reveal="" id="nid-range-products" className="nid-title">
-          {single ? "Le " : "Les "}
-          <span className="nid-accent">{single ? "produit" : "produits"}</span>
+          {single ? "Le produit" : "Les produits"}
           <span className="nid-dot">.</span>
         </h2>
 

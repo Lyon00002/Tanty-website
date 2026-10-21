@@ -1,7 +1,10 @@
 import type { ReactNode } from "react";
 import { Libre_Franklin } from "next/font/google";
 import { SiteAudio } from "@/site/audio/SiteAudio";
+import { NavigationProgress } from "@/site/motion/NavigationProgress";
 import { RevealRoot } from "@/site/motion/RevealRoot";
+import { ConnectionStatus } from "@/site/ui/ConnectionStatus";
+import { OfflineSupport } from "@/site/ui/OfflineSupport";
 import "@/site/tokens.css";
 import "@/site/world.css";
 
@@ -18,8 +21,11 @@ const franklin = Libre_Franklin({
 export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className={`w-nid ${franklin.variable}`}>
+      <NavigationProgress />
       <SiteAudio>{children}</SiteAudio>
       <RevealRoot />
+      <ConnectionStatus />
+      <OfflineSupport />
     </div>
   );
 }

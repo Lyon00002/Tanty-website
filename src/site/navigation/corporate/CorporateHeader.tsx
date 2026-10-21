@@ -1,5 +1,5 @@
 import { getCategory, listedCategories } from "@/data/categories";
-import { publishedProducts } from "@/data/products";
+import { getProductsByCategory, primaryPackaging, publishedProducts } from "@/data/products";
 import { getProductPhotos } from "@/lib/product-media";
 import { RANGE_LINKS, STORE_LINKS, routes } from "../../routes";
 import { CorporateHeaderClient } from "./CorporateHeaderClient";
@@ -31,14 +31,27 @@ export function CorporateHeader() {
       .map((p) => ({ p, photo: getProductPhotos(p)[0]?.src }))
       .filter((x): x is { p: (typeof listed)[number]; photo: string } => Boolean(x.photo))
       .map(({ p, photo }) => ({ id: p.id, name: p.name, range: getCategory(p.category).short, href: productHref(p.slug), photo })),
+    // Each suggestion carries its preview: the range logo, the product photo, or else the packaging outline.
     search: [
-      ...ranges.map((r) => ({ kind: "gamme" as const, label: r.name, sub: "Gamme", href: rangeHref(r.slug) })),
+      ...ranges.map((r) => {
+        const first = getProductsByCategory(r.id)[0];
+        return {
+          kind: "gamme" as const,
+          label: r.name,
+          sub: "Gamme",
+          href: rangeHref(r.slug),
+          thumb: r.logo?.src,
+          ground: r.logo?.ground[0],
+          packaging: first ? primaryPackaging(first) : undefined,
+        };
+      }),
       ...listed.map((p) => ({
         kind: "produit" as const,
         label: p.name,
         sub: `${getCategory(p.category).short} · ${p.formats.map((f) => f.label).join(", ")}`,
         href: productHref(p.slug),
         thumb: getProductPhotos(p)[0]?.src,
+        packaging: primaryPackaging(p),
       })),
     ],
     storeHref: STORE_LINKS ? routes.catalogue : undefined,

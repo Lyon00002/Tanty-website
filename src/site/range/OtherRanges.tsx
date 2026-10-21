@@ -11,8 +11,7 @@ export function OtherRanges({ current }: { current?: CategoryId }) {
     <section aria-labelledby="nid-other-ranges" className="nid-on-white pb-20 lg:pb-28">
       <div className="nid-wrap">
         <h2 data-reveal="" id="nid-other-ranges" className="nid-title">
-          {current ? "Les autres " : "Nos "}
-          <span className="nid-accent">gammes</span>
+          {current ? "Les autres gammes" : "Nos gammes"}
           <span className="nid-dot">.</span>
         </h2>
         <ul className="mt-10 grid grid-cols-3 gap-x-4 gap-y-8 sm:grid-cols-5 lg:gap-x-8">

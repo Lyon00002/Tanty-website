@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import type { PackagingKind } from "@/data/products";
 import { PackagingIcon } from "../../icons/PackagingIcon";
+import { Photo } from "../../ui/Photo";
 
 export interface ShowcasePhoto {
   src: string;
@@ -80,12 +80,12 @@ export function ProductsShowcase({
   };
 
   const media = (
-    <span className="relative block aspect-[4/5] w-full overflow-hidden rounded-[0_48px] bg-[#eef2f4]">
+    <span className="nid-skeleton relative block aspect-[4/5] w-full overflow-hidden rounded-[0_48px] bg-[#eef2f4]">
       {count > 0 ? (
         <>
           {/* The studio photo with its own background (client requirement) */}
           {current.photos.map((photo, k) => (
-            <Image
+            <Photo
               key={photo.src}
               src={photo.src}
               alt={current.href || k !== frame ? "" : photo.alt}
@@ -158,10 +158,10 @@ export function ProductsShowcase({
             // A small portrait of the studio photo (background kept); the packaging outline only when there is no photo.
             const thumb = (
               <span
-                className="relative flex h-[88px] w-[70px] shrink-0 items-center justify-center overflow-hidden rounded-[0_0.875rem] xl:h-[96px] xl:w-[76px]"
+                className="nid-skeleton relative flex h-[88px] w-[70px] shrink-0 items-center justify-center overflow-hidden rounded-[2px] xl:h-[96px] xl:w-[76px]"
               >
                 {item.photos[0] ? (
-                  <Image src={item.photos[0].src} alt="" fill sizes="80px" className="object-cover" />
+                  <Photo src={item.photos[0].src} alt="" fill sizes="80px" className="object-cover" />
                 ) : (
                   <PackagingIcon kind={item.packaging} className="h-14 w-auto xl:h-16" />
                 )}

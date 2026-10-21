@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { NewsItem } from "./news";
+import { Photo } from "../../ui/Photo";
 
 /**
  * News carousel laid out like olamagri.com's "Latest News": two cards across
@@ -72,8 +72,8 @@ export function NewsCarousel({ items }: { items: NewsItem[] }) {
         {items.map((item) => (
           <li key={item.id} data-reveal="" className="nid-news-card w-[85%] shrink-0 snap-start sm:w-[calc((100%-1.875rem)/2)]">
             <article>
-              <div className="relative h-[var(--news-img-h)] overflow-hidden rounded-[0_80px]">
-                <Image
+              <div className="nid-skeleton relative h-[var(--news-img-h)] overflow-hidden rounded-[0_80px]">
+                <Photo
                   src={item.image.src}
                   alt={item.image.alt}
                   fill

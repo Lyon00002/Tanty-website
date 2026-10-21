@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import type { PackagingKind } from "@/data/products";
 import { PACKAGING_LABEL, PackagingIcon } from "../icons/PackagingIcon";
+import { Photo } from "../ui/Photo";
 
 export interface StagePhoto {
   src: string;
@@ -24,9 +24,9 @@ export function ProductStage({ photos, packaging, name }: { photos: StagePhoto[]
   return (
     <div className="mx-auto w-full max-w-[30rem] lg:mx-0">
       <div data-reveal="clip">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[0_48px] bg-[#eef2f4]">
+        <div className="nid-skeleton relative aspect-[4/5] overflow-hidden rounded-[0_48px] bg-[#eef2f4]">
           {current ? (
-            <Image
+            <Photo
               key={current.src}
               src={current.src}
               alt={current.alt}
@@ -54,11 +54,11 @@ export function ProductStage({ photos, packaging, name }: { photos: StagePhoto[]
               type="button"
               onClick={() => setActive(i)}
               aria-pressed={i === active}
-              className={`relative h-20 w-16 overflow-hidden rounded-[0_0.875rem] border-2 transition-colors duration-200 ${
+              className={`nid-skeleton relative h-20 w-16 overflow-hidden rounded-[0_0.875rem] border-2 transition-colors duration-200 ${
                 i === active ? "border-[var(--nid-yellow)]" : "border-transparent hover:border-[var(--nid-ink)]/25"
               }`}
             >
-              <Image src={photo.src} alt="" fill sizes="64px" className="object-cover" />
+              <Photo src={photo.src} alt="" fill sizes="64px" className="object-cover" />
               <span className="sr-only">
                 Photo {i + 1} sur {photos.length}
               </span>

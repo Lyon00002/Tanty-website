@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { MILESTONES } from "../histoire/milestones";
 import { SunPath } from "./SunPath";
+import { Photo } from "../../ui/Photo";
 
 /**
  * Two photographs TANTY published (public/brand/photos, see SOURCES.md),
@@ -60,7 +60,8 @@ export function Parcours() {
                 }
               >
                 <div className="bg-white p-[6px] shadow-[0_22px_40px_-26px_rgb(17_36_26/0.55)]">
-                  <Image
+                  <div className="nid-skeleton relative">
+                  <Photo
                     src={p.src}
                     width={p.width}
                     height={p.height}
@@ -68,6 +69,7 @@ export function Parcours() {
                     sizes={i === 0 ? "(min-width: 1024px) 30rem, 88vw" : "(min-width: 1024px) 18rem, 52vw"}
                     className="block h-auto w-full"
                   />
+                  </div>
                 </div>
                 <figcaption
                   className={`mt-2 text-sm leading-snug text-[var(--nid-ink-soft)] ${i === 0 ? "ml-auto max-w-[46%] text-right lg:ml-0 lg:text-left" : "lg:text-right"}`}

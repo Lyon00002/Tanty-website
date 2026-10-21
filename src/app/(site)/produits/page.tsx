@@ -34,7 +34,7 @@ export default function CataloguePage() {
           photo={{ src: "/brand/photos/stand-rayonnages-degustation.jpg", position: "50% 35%" }}
           title={
             <>
-              Tous nos <span className="nid-accent">produits</span>
+              Tous nos produits
               <span className="nid-dot">.</span>
             </>
           }

@@ -6,6 +6,7 @@ import { useRef, type CSSProperties } from "react";
 import { getCategory, type CategoryId } from "@/data/categories";
 import { gsap, MOTION_OK, useGSAP } from "../../motion/gsap";
 import { RANGE_LINKS, STORE_LINKS, routes } from "../../routes";
+import { Photo } from "../../ui/Photo";
 
 interface Campaign {
   range: CategoryId;
@@ -99,7 +100,7 @@ export function Campagnes() {
     <section id="campagnes" aria-labelledby="nid-campaigns-title" className="nid-on-white relative scroll-mt-20">
       <div className="nid-wrap pb-12 pt-20 lg:pb-16 lg:pt-24">
         <h2 data-reveal="" id="nid-campaigns-title" className="nid-title">
-          À l&apos;<span className="nid-accent">affiche</span>
+          À l&apos;affiche
           <span className="nid-dot">.</span>
         </h2>
         <p data-reveal="" className="nid-lead mt-5 max-w-[38rem] text-[var(--nid-ink-soft)]">
@@ -142,20 +143,26 @@ export function Campagnes() {
                       className="pointer-events-auto relative block h-[calc(100svh-6.5rem)] overflow-hidden rounded-2xl bg-[var(--nid-green-deep)] shadow-xl sm:h-[calc(100svh-7.5rem)] md:h-[min(44rem,calc(100svh-7.5rem))] lg:h-[min(44rem,calc(100svh-10rem))] lg:rounded-3xl lg:shadow-2xl"
                     >
                       {/* Phone: the portrait visual fills the card when there is one */}
-                      {c.srcMobile && <Image src={c.srcMobile} alt="" fill sizes="100vw" className="object-cover md:hidden" />}
+                      {c.srcMobile && (
+                        <span className="nid-skeleton absolute inset-0 md:hidden">
+                          <Photo src={c.srcMobile} alt="" fill sizes="100vw" className="object-cover" />
+                        </span>
+                      )}
                       <span className={c.srcMobile ? "hidden md:contents" : "contents"}>
                         {/* Phone and tablet: the same visual, tiny and scaled up, as a soft fill around it */}
                         <Image src={c.src} alt="" fill sizes="64px" quality={40} className="scale-125 object-cover blur-xl lg:hidden" />
                         <span aria-hidden="true" className="absolute inset-0 bg-[rgb(9_34_18/0.2)] lg:hidden" />
                         {/* The visual: whole on phone and tablet, filling the card on desktop */}
-                        <Image
-                          src={c.src}
-                          alt=""
-                          fill
-                          sizes="(min-width: 768px) 80rem, 100vw"
-                          style={{ objectPosition: c.focus }}
-                          className="object-contain lg:object-cover"
-                        />
+                        <span className="nid-skeleton absolute inset-0">
+                          <Photo
+                            src={c.src}
+                            alt=""
+                            fill
+                            sizes="(min-width: 768px) 80rem, 100vw"
+                            style={{ objectPosition: c.focus }}
+                            className="object-contain lg:object-cover"
+                          />
+                        </span>
                       </span>
                       {/* Darkens as the card sinks under the next one */}
                       <span

@@ -62,6 +62,15 @@ html:has(.w-nid) {
   caret-color: var(--nid-green);
 }
 
+/* Smooth scrolling, as in the E-shop project: an anchor glides to its
+   section, and coming back to a page glides back to where the visitor was
+   (Next 16 leaves scroll-behavior alone during navigation). */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.w-nid) {
+    scroll-behavior: smooth;
+  }
+}
+
 .w-nid ::selection {
   background: var(--nid-green);
   color: var(--nid-yellow);

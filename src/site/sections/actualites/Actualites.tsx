@@ -7,7 +7,7 @@ export function Actualites() {
     <section id="actualites" aria-labelledby="nid-news-title" className="nid-on-white scroll-mt-20 overflow-x-clip pb-20 pt-14 lg:pb-28 lg:pt-16">
       <div className="nid-wrap">
         <h2 data-reveal="" id="nid-news-title" className="nid-title">
-          Nos <span className="nid-accent">actualités</span>
+          Nos actualités
           <span className="nid-dot">.</span>
         </h2>
         <div className="mt-10">

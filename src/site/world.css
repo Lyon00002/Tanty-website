@@ -380,13 +380,10 @@ a:focus-visible > .nid-bubble {
   }
 }
 
-/* Section titles end on a green full stop, like their closing words
-   (TANTY yellow on the dark band, deep green on the yellow band). */
+/* Section titles end on a TANTY yellow full stop, so every title plays on
+   both brand colours: green closing words, yellow stop (yellow cannot carry
+   the words on white, it would be unreadable). Deep green on the yellow band. */
 .nid-dot {
-  color: var(--nid-green);
-}
-
-.nid-on-deep .nid-dot {
   color: var(--nid-yellow);
 }
 
@@ -516,6 +513,87 @@ a:focus-visible > .nid-bubble {
   }
 }
 
+/* Search field: on focus, a thin green edge (1px border + 1px ring) rather
+   than the site's thick focus outline, which read too heavy around a field. */
+.w-nid .nid-search-input:focus,
+.w-nid .nid-search-input:focus-visible {
+  outline: none;
+  border-color: var(--nid-green);
+  box-shadow: 0 0 0 1px var(--nid-green);
+}
+
+/* The browser's own clear button (blue, off palette) is not shown. */
+.nid-search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Photos waiting to load (Photo): a soft light sweeps over the grey ground
+   of their frame, then the photo fades in. Only when scripts run; the sweep
+   stops if the photo cannot load, and stays still under reduced motion. */
+.nid-skeleton img {
+  transition: opacity 0.5s var(--nid-ease-out);
+}
+
+@media (scripting: enabled) {
+  .nid-skeleton img[data-state="loading"] {
+    opacity: 0;
+  }
+
+  .nid-skeleton:has(img[data-state="loading"])::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.65) 50%, transparent 70%) 0 0 / 220% 100% no-repeat,
+      #eef2f4;
+    animation: nid-shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes nid-shimmer {
+  from {
+    background-position: 130% 0, 0 0;
+  }
+
+  to {
+    background-position: -130% 0, 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nid-skeleton::after {
+    animation: none !important;
+  }
+}
+
+/* Loading bar (NavigationProgress): moves with its transform, fades out once the page is there. */
+.nid-progress {
+  opacity: 0;
+  transition:
+    transform 0.4s var(--nid-ease-out),
+    opacity 0.35s ease;
+}
+
+.nid-progress[data-active="true"] {
+  opacity: 1;
+}
+
+/* The connection note rises in from the bottom. */
+@keyframes nid-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nid-connection {
+    animation: nid-rise-in 0.4s var(--nid-ease-out) both;
+  }
+}
+
 /* Menu bar: the hero swoosh draws in under a hovered or open item. */
 .nid-barlink {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%23fecc00'/%3E%3C/svg%3E");
@@ -559,12 +637,13 @@ a:focus-visible > .nid-bubble {
   }
 }
 
-/* "Nos produits" stack: each product in a flat card, as the site's cards
-   (white, hairline border, diagonal corners), no elevation. The product shown
-   large, and the one under the pointer, take a yellow border and tint. */
+/* "Nos produits" stack: each product in a plain flat card (white, hairline
+   border, the same small corners all round, as the site's tags), no
+   elevation. The product shown large, and the one under the pointer, take a
+   yellow border and tint. */
 .nid-product-card {
   border: 1px solid rgb(17 36 26 / 0.12);
-  border-radius: 0 1.5rem;
+  border-radius: 4px;
   background: #ffffff;
   padding: 0.75rem 1rem 0.75rem 0.75rem;
   transition:
@@ -671,11 +750,30 @@ a:focus-visible > .nid-bubble {
 /* Entrances (RevealRoot): elements marked data-reveal wait out of sight
    until RevealRoot plays their entrance as they reach the screen. "" rises
    and fades, "fade" only fades, "clip" opens from the top like a blind.
-   Held back only when scripts run and motion is welcome. */
+   Held back only when scripts run and motion is welcome. Safety net for slow
+   connections: if the scripts have not taken over after 2.5 s, everything
+   shows anyway (nid-reveal-safety); RevealRoot's own entrances, played later
+   with the Web Animations API, take precedence over it. Only "clip" elements
+   get a clip-path: on any other one it would cut what overflows its box (the
+   title swooshes, the hero ribbon). */
+@keyframes nid-reveal-safety {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nid-reveal-safety-clip {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
   [data-reveal] {
     opacity: 0;
     transform: translate3d(0, 1.5rem, 0);
+    animation: nid-reveal-safety 0.6s var(--nid-ease-out) 2.5s forwards;
   }
 
   [data-reveal="fade"] {
@@ -686,6 +784,7 @@ a:focus-visible > .nid-bubble {
     opacity: 1;
     transform: none;
     clip-path: inset(0 0 100% 0);
+    animation-name: nid-reveal-safety-clip;
   }
 }
 

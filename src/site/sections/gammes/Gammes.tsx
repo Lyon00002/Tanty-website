@@ -1,25 +1,14 @@
 import Image from "next/image";
 import { BandEdge } from "../../borders/BandEdge";
-import { listedCategories, type CategoryId } from "@/data/categories";
+import { listedCategories, universes } from "@/data/categories";
 import { getProductsByCategory, primaryPackaging } from "@/data/products";
 import { RANGE_LINKS, routes } from "../../routes";
 import { RangePortfolio, type PortfolioGroup, type PortfolioTile } from "./RangePortfolio";
 
-/** Families used by the filter (a presentation choice, not product data). */
-const GROUPS: PortfolioGroup[] = [
-  { id: "bouillies", label: "Bouillies" },
-  { id: "gourmandises", label: "En-cas & chocolat" },
-  { id: "cuisine", label: "Cuisine" },
-];
-
-const GROUP_OF: Partial<Record<CategoryId, string>> = {
-  reine: "bouillies",
-  bouillies: "bouillies",
-  grignoter: "gourmandises",
-  choco: "gourmandises",
-  chapelure: "cuisine",
-  piment: "cuisine",
-};
+/** The filter: the catalogue's universes that hold at least one listed range. */
+const GROUPS: PortfolioGroup[] = universes
+  .filter((u) => listedCategories.some((c) => c.universe === u.id))
+  .map((u) => ({ id: u.id, label: u.name }));
 
 /**
  * Explorez nos gammes: the ranges in orbit around the TANTY logo, on a dark
@@ -33,7 +22,7 @@ export function Gammes() {
       return {
         range,
         count: products.length,
-        group: GROUP_OF[range.id] ?? "cuisine",
+        group: range.universe,
         packaging: products[0] ? primaryPackaging(products[0]) : undefined,
         href: RANGE_LINKS ? routes.range(range) : undefined,
       };

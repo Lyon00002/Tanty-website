@@ -7,13 +7,20 @@ import { STORE_LINKS, routes } from "../../routes";
 import { ProductsShowcase, type ShowcaseItem } from "./ProductsShowcase";
 
 /**
+ * The stack holds four rows, as many as stay pinned beside the large view
+ * while it scrolls past (a taller stack has no room left to stick).
+ */
+const SHOWN = 8;
+
+/**
  * Nos produits, in the layout of olamagri.com's "Our Products & Services":
  * only the products that already have their official photos (client request),
- * in range order, flagships first; each opens its sheet in the store, "Voir
- * plus" opens the store.
+ * picked in turn from each range (flagships first) so that every range shows,
+ * then laid out in range order; each opens its sheet in the store, "Voir
+ * plus" opens the store with all of them.
  */
 export function Featured() {
-  const items: ShowcaseItem[] = publishedProducts
+  const withPhotos = publishedProducts
     .filter((p) => getCategory(p.category).listed)
     .map((p) => ({ product: p, photos: getProductPhotos(p) }))
     .filter(({ photos }) => photos.length > 0)
@@ -21,7 +28,17 @@ export function Featured() {
       (a, b) =>
         getCategory(a.product.category).order - getCategory(b.product.category).order ||
         Number(Boolean(b.product.featured)) - Number(Boolean(a.product.featured)),
-    )
+    );
+  // One product per range, round after round, until the stack is full.
+  const byRange = Map.groupBy(withPhotos, ({ product }) => product.category);
+  const picked: typeof withPhotos = [];
+  for (let round = 0; picked.length < SHOWN && picked.length < withPhotos.length; round++) {
+    for (const list of byRange.values()) {
+      if (list[round] && picked.length < SHOWN) picked.push(list[round]);
+    }
+  }
+  const items: ShowcaseItem[] = withPhotos
+    .filter((entry) => picked.includes(entry))
     .map(({ product: p, photos }) => {
       const range = getCategory(p.category).short;
       return {
@@ -45,7 +62,7 @@ export function Featured() {
           heading={
             <>
               <h2 data-reveal="" id="nid-featured-title" className="nid-title">
-                Nos <span className="nid-accent">produits</span>
+                Nos produits
                 <span className="nid-dot">.</span>
               </h2>
               <p data-reveal="" className="nid-lead mt-5">

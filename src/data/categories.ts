@@ -1,6 +1,8 @@
 /**
- * TANTY ranges ("gammes"), organised by sub-brand as the client presents them
- * (logos supplied in "tanty assets", 2026-10-20).
+ * TANTY ranges ("gammes"), organised as the old shop's catalogue structure
+ * the user supplied (~/Desktop/catalogue_tanty_structure.csv, 2026-10-21):
+ * four universes, each holding its ranges, each range its products. Range
+ * logos were supplied in "tanty assets" (2026-10-20).
  *
  * `logo` is the range's official logo when the client has supplied it.
  * TANTY Reine and TANTY Piment de table logos are being designed: leave
@@ -9,7 +11,17 @@
  * otherwise from the packaging (approximations).
  */
 
-export type CategoryId = "reine" | "bouillies" | "grignoter" | "chapelure" | "piment" | "choco" | "ingredients";
+export type CategoryId = "reine" | "prestige" | "babyvita" | "grignoter" | "choco" | "chapelure" | "piment" | "ingredients";
+
+/** The universes of the catalogue ("univers_propose" in the supplied structure), in order. */
+export type UniverseId = "infantile" | "snacking" | "tartiner" | "cuisine";
+
+export const universes: readonly { id: UniverseId; name: string }[] = [
+  { id: "infantile", name: "Alimentation infantile" },
+  { id: "snacking", name: "Snacking" },
+  { id: "tartiner", name: "Pâte à tartiner" },
+  { id: "cuisine", name: "Ingrédients culinaires" },
+];
 
 export interface CategoryLogo {
   /** 16:10 tile crop, path under /public (scripts/crop-category-logos.py). */
@@ -31,6 +43,7 @@ export interface Category {
   /** Name without the brand, for places where TANTY is already obvious. */
   short: string;
   summary: string;
+  universe: UniverseId;
   order: number;
   /** false = not shown in navigation (only unpublished products). */
   listed: boolean;
@@ -47,18 +60,34 @@ export const categories: readonly Category[] = [
     name: "TANTY Reine",
     short: "Reine",
     summary: "Les bouillies de soja infantiles Reine, en sachets de 57 g, en étuis de 200 g et en seaux Custard Powder.",
+    universe: "infantile",
     order: 1,
     listed: true,
     color: "#e5780f",
     light: "#fff1d6",
   },
+  // The TANTY soy porridges in their "Prestige" box (user choice, 2026-10-21: one range
+  // for the five flavours rather than one range each, as Lactée and Parfumé were in the CSV).
   {
-    id: "bouillies",
-    slug: "bouillies-tanty",
-    name: "Bouillies TANTY",
-    short: "Bouillies",
-    summary: "TANTY Lactée, TANTY Parfumé et Baby Vita, les bouillies de soja de la famille TANTY.",
+    id: "prestige",
+    slug: "tanty-prestige",
+    name: "TANTY Prestige",
+    short: "Prestige",
+    summary: "Les bouillies de soja TANTY en étui Prestige, pour enfants et adultes : Nature, Arachides, Poisson, Lactée et Parfumé.",
+    universe: "infantile",
     order: 2,
+    listed: true,
+    color: "#1b6430",
+    light: "#e8f3e3",
+  },
+  {
+    id: "babyvita",
+    slug: "baby-vita",
+    name: "Baby Vita",
+    short: "Baby Vita",
+    summary: "Une bouillie enrichie pour assurer une croissance et un éveil continu à vos enfants.",
+    universe: "infantile",
+    order: 3,
     listed: true,
     color: "#1b6430",
     light: "#e8f3e3",
@@ -68,8 +97,9 @@ export const categories: readonly Category[] = [
     slug: "tanty-a-grignoter",
     name: "TANTY à Grignoter",
     short: "À Grignoter",
-    summary: "Des amuse-gueules croustillants : arachides, croquettes, chips de plantain, beignets soufflés.",
-    order: 3,
+    summary: "Des amuse-gueules croustillants et riches en énergie : arachides, croquettes, chips de plantain, beignets soufflés.",
+    universe: "snacking",
+    order: 4,
     listed: true,
     logo: {
       src: "/brand/gammes/grignoter.png",
@@ -88,7 +118,8 @@ export const categories: readonly Category[] = [
     name: "TANTY Chapelure",
     short: "Chapelure",
     summary: "La chapelure TANTY pour paner, gratiner et préparer vos farces.",
-    order: 4,
+    universe: "cuisine",
+    order: 6,
     listed: true,
     logo: {
       src: "/brand/gammes/chapelure.png",
@@ -107,7 +138,8 @@ export const categories: readonly Category[] = [
     name: "TANTY Piment de table",
     short: "Piment de table",
     summary: "Le piment de table TANTY, naturel, pour relever vos plats.",
-    order: 5,
+    universe: "cuisine",
+    order: 7,
     listed: true,
     color: "#c93229",
     light: "#fbe4e1",
@@ -118,7 +150,8 @@ export const categories: readonly Category[] = [
     name: "TANTY Choco",
     short: "Choco",
     summary: "Le chocolat à tartiner made in Cameroun, de 1 à 10 litres.",
-    order: 6,
+    universe: "tartiner",
+    order: 5,
     listed: true,
     logo: {
       src: "/brand/gammes/choco.png",
@@ -137,7 +170,8 @@ export const categories: readonly Category[] = [
     name: "Ingrédients culinaires",
     short: "Ingrédients culinaires",
     summary: "Huile d'arachide et farine de soja (ancien catalogue, disponibilité à confirmer).",
-    order: 7,
+    universe: "cuisine",
+    order: 8,
     listed: false,
     color: "#1b6430",
     light: "#e8f3e3",

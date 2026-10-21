@@ -18,7 +18,7 @@ export function RelatedProducts({ product }: { product: Product }) {
       <div className="nid-wrap">
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <h2 data-reveal="" id="nid-related" className="nid-title">
-            Dans la même <span className="nid-accent">gamme</span>
+            Dans la même gamme
             <span className="nid-dot">.</span>
           </h2>
           <Link data-reveal="" href={rangeHref} className="nid-link inline-flex items-center gap-1.5 text-[var(--nid-green-deep)]">

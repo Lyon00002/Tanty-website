@@ -8,6 +8,7 @@ import { BrandLogo } from "@/components/brand/BrandLogo";
 import { company } from "@/data/company";
 import { whatsappContactUrl } from "@/lib/whatsapp";
 import { RibbonDivider } from "../../borders/RibbonDivider";
+import { Photo } from "../../ui/Photo";
 import { routes } from "../../routes";
 import { SearchBox } from "./SearchBox";
 import type { HeaderData, HeaderRange } from "./types";
@@ -155,7 +156,7 @@ export function CorporateHeaderClient({ data }: { data: HeaderData }) {
   const panels: Record<PanelKey, ReactNode> = {
     gammes: (
       <div>
-        <ul className="grid max-w-[58rem] grid-cols-6 gap-8">
+        <ul className="grid max-w-[68rem] grid-cols-7 gap-6 xl:gap-8">
           {data.ranges.map((r) => (
             <li key={r.id}>
               <Link href={r.href} onClick={close} className="group block text-center">
@@ -178,8 +179,8 @@ export function CorporateHeaderClient({ data }: { data: HeaderData }) {
           {data.products.map((p) => (
             <li key={p.id}>
               <Link href={p.href} onClick={close} className="group block">
-                <span className="relative block aspect-[4/5] overflow-hidden rounded-[0_20px]">
-                  <Image src={p.photo} alt="" fill sizes="10rem" className="object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                <span className="nid-skeleton relative block aspect-[4/5] overflow-hidden rounded-[0_20px]">
+                  <Photo src={p.photo} alt="" fill sizes="10rem" className="object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                 </span>
                 <span className="mt-2 block text-xs font-semibold uppercase tracking-[0.06em] text-[var(--nid-green)]">{p.range}</span>
                 <span className="block text-sm font-semibold leading-snug text-[var(--nid-ink)]">{p.name}</span>
@@ -200,9 +201,14 @@ export function CorporateHeaderClient({ data }: { data: HeaderData }) {
       </div>
     ),
     carrieres: <CareersPanel onPick={close} />,
+    // Search: centred under its own title, a taller field, suggestions with their previews.
     recherche: (
-      <div className="max-w-[40rem]">
-        <SearchBox entries={data.search} autoFocus onPick={close} />
+      <div className="mx-auto max-w-[42rem] pb-4 text-center">
+        <p className="nid-title text-[clamp(1.75rem,1.4rem+1.1vw,2.4rem)]">
+          Que recherchez-vous<span className="nid-dot">&nbsp;?</span>
+        </p>
+        <p className="mt-3 text-[var(--nid-ink-soft)]">Le nom d&apos;un produit ou d&apos;une gamme TANTY.</p>
+        <SearchBox entries={data.search} autoFocus onPick={close} large className="mt-7" />
       </div>
     ),
   };

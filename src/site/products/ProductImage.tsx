@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { primaryPackaging, type Product } from "@/data/products";
 import { getMainProductPhoto } from "@/lib/product-media";
 import { PACKAGING_LABEL, PackagingIcon } from "../icons/PackagingIcon";
+import { Photo } from "../ui/Photo";
 
 interface ProductImageProps {
   product: Product;
@@ -22,8 +22,8 @@ export function ProductImage({ product, className, sizes = "(min-width: 1024px) 
   const photo = getMainProductPhoto(product);
   if (photo) {
     return (
-      <div className={frame}>
-        <Image
+      <div className={`nid-skeleton ${frame}`}>
+        <Photo
           src={photo.src}
           alt={photo.alt}
           fill

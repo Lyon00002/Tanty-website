@@ -16,8 +16,14 @@ const nextConfig: NextConfig = {
     },
   },
   async redirects() {
-    if (!HOME_ONLY) return [];
-    return CLOSED_PAGES.map((source) => ({ source, destination: "/", permanent: false }));
+    // Ranges merged into TANTY Prestige, the soy porridges in their Prestige box (2026-10-21).
+    const moved = ["bouillies-tanty", "tanty-lactee", "tanty-parfume"].map((slug) => ({
+      source: `/gammes/${slug}`,
+      destination: "/gammes/tanty-prestige",
+      permanent: false,
+    }));
+    if (!HOME_ONLY) return moved;
+    return [...moved, ...CLOSED_PAGES.map((source) => ({ source, destination: "/", permanent: false }))];
   },
 };
 

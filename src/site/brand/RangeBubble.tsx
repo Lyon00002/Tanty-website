@@ -28,17 +28,20 @@ export function RangeBubbleFace({ range, packaging, sizes = "10rem" }: { range: 
   );
 }
 
-/** Range titles in the site's two tones: "TANTY" in ink, the range's own words in green, then the full stop. */
+/**
+ * Range titles: two terms, two tones ("TANTY" in ink, the range's own words
+ * in green); a name of a single term (Baby Vita) stays in one colour. Then the full stop.
+ */
 export function RangeTitle({ range }: { range: Category }) {
   const [lead, accent] = range.name.startsWith("TANTY ")
     ? ["TANTY ", range.name.slice(6)]
     : range.name.endsWith(" TANTY")
       ? [range.name.slice(0, -5), "TANTY"]
-      : ["", range.name];
+      : [range.name, ""];
   return (
     <>
       {lead}
-      <span className="nid-accent">{accent}</span>
+      {accent && <span className="nid-accent">{accent}</span>}
       <span className="nid-dot">.</span>
     </>
   );

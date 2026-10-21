@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FECC00" />
+    <title>Hors connexion · TANTY</title>
+    <!--
+      The page shown when a TANTY page cannot load without a connection
+      (served by public/sw.js). Self-contained: its styles are inline and its
+      only image, the logo, is kept by the service worker.
+    -->
+    <style>
+      :root {
+        --ink: #11241a;
+        --ink-soft: #2c3f2f;
+        --green: #1b6430;
+        --green-deep: #0f3a1e;
+        --yellow: #fecc00;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #fff;
+        color: var(--ink);
+        font-family: "Libre Franklin", "Franklin Gothic Medium", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      ::selection {
+        background: var(--green);
+        color: var(--yellow);
+      }
+      main {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 3rem 1.25rem 2rem;
+      }
+      .card {
+        width: 100%;
+        max-width: 36rem;
+        text-align: center;
+      }
+      .logo {
+        display: block;
+        width: 9.5rem;
+        height: auto;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 2.75rem 0 0;
+        font-size: clamp(2rem, 1.4rem + 2.4vw, 2.9rem);
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+        text-wrap: balance;
+      }
+      h1 .accent {
+        color: var(--green);
+      }
+      h1 .dot {
+        color: var(--yellow);
+      }
+      p {
+        margin: 1.25rem auto 0;
+        max-width: 30rem;
+        font-size: 1.0625rem;
+        line-height: 1.6;
+        color: var(--ink-soft);
+      }
+      .actions {
+        margin-top: 2.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+      }
+      button {
+        display: inline-flex;
+        min-height: 3rem;
+        min-width: 12.5rem;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.75rem;
+        border: 0;
+        border-radius: 2px;
+        background: var(--green);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      button:hover {
+        background: var(--green-deep);
+      }
+      :focus-visible {
+        outline: 3px solid var(--green-deep);
+        outline-offset: 4px;
+        border-radius: 6px;
+      }
+      .call {
+        margin: 0;
+        font-size: 0.9375rem;
+      }
+      .call a {
+        color: var(--ink);
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.24em;
+        text-decoration-color: rgb(17 36 26 / 0.45);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .ribbon {
+        display: block;
+        width: 100%;
+        height: 2rem;
+        margin-top: 3.5rem;
+      }
+      .waiting {
+        margin-top: 0.75rem;
+        font-size: 0.875rem;
+        color: var(--ink-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="card">
+        <img class="logo" src="/brand/logo/tanty-logo.png" alt="TANTY" width="900" height="440" />
+        <h1>Vous êtes <span class="accent">hors connexion</span><span class="dot">.</span></h1>
+        <p>Cette page ne peut pas s'afficher sans internet. Vérifiez votre connexion, puis réessayez.</p>
+        <div class="actions">
+          <button type="button" id="retry">Réessayer</button>
+          <p class="call">Pour commander en attendant, appelez-nous au <a href="tel:+237690796240">+237 690 79 62 40</a>.</p>
+        </div>
+        <p class="waiting" id="waiting" hidden>La page se recharge dès que la connexion revient.</p>
+        <!-- The TANTY logo ribbon, as the section borders of the site -->
+        <svg class="ribbon" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="r" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#fecc00" stop-opacity="0.2" />
+              <stop offset="0.3" stop-color="#fecc00" />
+              <stop offset="0.8" stop-color="#fecc00" />
+              <stop offset="1" stop-color="#fecc00" stop-opacity="0.25" />
+            </linearGradient>
+          </defs>
+          <path d="M0.0 22.20L10.0 21.86L20.0 21.51L30.0 21.16L40.0 20.80L50.0 20.43L60.0 20.07L70.0 19.70L80.0 19.32L90.0 18.95L100.0 18.58L110.0 18.21L120.0 17.84L130.0 17.47L140.0 17.10L150.0 16.73L160.0 16.37L170.0 16.01L180.0 15.65L190.0 15.30L200.0 14.95L210.0 14.61L220.0 14.27L230.0 13.93L240.0 13.60L250.0 13.28L260.0 12.97L270.0 12.66L280.0 12.35L290.0 12.06L300.0 11.77L310.0 11.49L320.0 11.22L330.0 10.96L340.0 10.71L350.0 10.46L360.0 10.23L370.0 10.00L380.0 9.78L390.0 9.58L400.0 9.38L410.0 9.20L420.0 9.03L430.0 8.86L440.0 8.71L450.0 8.57L460.0 8.44L470.0 8.33L480.0 8.22L490.0 8.13L500.0 8.05L510.0 7.98L520.0 7.92L530.0 7.88L540.0 7.84L550.0 7.82L560.0 7.82L570.0 7.82L580.0 7.84L590.0 7.87L600.0 7.91L610.0 7.97L620.0 8.04L630.0 8.12L640.0 8.21L650.0 8.32L660.0 8.43L670.0 8.56L680.0 8.71L690.0 8.86L700.0 9.03L710.0 9.21L720.0 9.40L730.0 9.60L740.0 9.81L750.0 10.04L760.0 10.27L770.0 10.52L780.0 10.77L790.0 11.04L800.0 11.32L810.0 11.61L820.0 11.90L830.0 12.21L840.0 12.53L850.0 12.85L860.0 13.18L870.0 13.53L880.0 13.88L890.0 14.23L900.0 14.60L910.0 14.97L920.0 15.35L930.0 15.74L940.0 16.13L950.0 16.53L960.0 16.93L970.0 17.34L980.0 17.75L990.0 18.17L1000.0 18.59L1010.0 19.02L1020.0 19.45L1030.0 19.88L1040.0 20.31L1050.0 20.74L1060.0 21.18L1070.0 21.62L1080.0 22.05L1090.0 22.49L1100.0 22.93L1110.0 23.36L1120.0 23.79L1130.0 24.21L1140.0 24.63L1150.0 25.02L1160.0 25.42L1170.0 25.81L1180.0 26.21L1190.0 26.60L1200.0 27.00L1200.0 27.40L1190.0 27.00L1180.0 26.61L1170.0 26.21L1160.0 25.82L1150.0 25.42L1140.0 25.04L1130.0 24.67L1120.0 24.32L1110.0 23.97L1100.0 23.63L1090.0 23.30L1080.0 22.98L1070.0 22.66L1060.0 22.35L1050.0 22.05L1040.0 21.75L1030.0 21.45L1020.0 21.17L1010.0 20.88L1000.0 20.61L990.0 20.34L980.0 20.07L970.0 19.81L960.0 19.56L950.0 19.31L940.0 19.07L930.0 18.84L920.0 18.61L910.0 18.39L900.0 18.17L890.0 17.96L880.0 17.75L870.0 17.55L860.0 17.36L850.0 17.17L840.0 16.99L830.0 16.81L820.0 16.65L810.0 16.48L800.0 16.33L790.0 16.18L780.0 16.03L770.0 15.89L760.0 15.76L750.0 15.64L740.0 15.52L730.0 15.40L720.0 15.29L710.0 15.19L700.0 15.10L690.0 15.01L680.0 14.93L670.0 14.85L660.0 14.78L650.0 14.72L640.0 14.66L630.0 14.61L620.0 14.56L610.0 14.52L600.0 14.49L590.0 14.46L580.0 14.44L570.0 14.42L560.0 14.41L550.0 14.41L540.0 14.41L530.0 14.42L520.0 14.43L510.0 14.45L500.0 14.48L490.0 14.51L480.0 14.55L470.0 14.59L460.0 14.64L450.0 14.70L440.0 14.76L430.0 14.83L420.0 14.90L410.0 14.98L400.0 15.06L390.0 15.15L380.0 15.24L370.0 15.34L360.0 15.45L350.0 15.56L340.0 15.68L330.0 15.80L320.0 15.93L310.0 16.06L300.0 16.20L290.0 16.34L280.0 16.49L270.0 16.64L260.0 16.80L250.0 16.96L240.0 17.13L230.0 17.30L220.0 17.48L210.0 17.66L200.0 17.85L190.0 18.04L180.0 18.24L170.0 18.44L160.0 18.65L150.0 18.86L140.0 19.07L130.0 19.29L120.0 19.52L110.0 19.75L100.0 19.98L90.0 20.22L80.0 20.46L70.0 20.71L60.0 20.96L50.0 21.22L40.0 21.48L30.0 21.75L20.0 22.02L10.0 22.30L0.0 22.60Z" fill="url(#r)" />
+        </svg>
+      </div>
+    </main>
+    <script>
+      document.getElementById("retry").addEventListener("click", function () {
+        location.reload();
+      });
+      document.getElementById("waiting").hidden = false;
+      window.addEventListener("online", function () {
+        location.reload();
+      });
+    </script>
+  </body>
+</html>

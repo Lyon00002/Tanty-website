@@ -5,7 +5,12 @@ import type { CategoryId } from "./categories";
  *
  * Sources: archived tanty.cm shop (Oct-Nov 2025) and older site (2014-2018),
  * retailer pages and packaging visuals, inventoried in
- * ~/projets/tanty-3d/references/INVENTAIRE.md and INFOS-ENTREPRISE.md.
+ * ~/projets/tanty-3d/references/INVENTAIRE.md and INFOS-ENTREPRISE.md; the
+ * old shop's catalogue structure supplied by the user (2026-10-21,
+ * catalogue_tanty_structure.csv: ranges, flavours, formats, official texts).
+ * Left out from it on purpose: its prices (not confirmed), the rows it flags
+ * itself as anomalies (Croquette "Grand 95 g" duplicate, a Reine 2 L bucket
+ * without flavour) and the book "Né pour échouer" (not a food product).
  *
  * Rules:
  * - Only verified text goes into `description` and `facts`. When nothing is
@@ -62,6 +67,10 @@ export interface Product {
   published: boolean;
   featured?: boolean;
 }
+
+/** The old shop's text for every TANTY à Grignoter product. */
+const GRIGNOTER =
+  "Des amuse-gueules croustillants et riches en énergie, à partager en famille ou entre amis lors des pique-niques et des escapades improvisées.";
 
 export const products: readonly Product[] = [
   // TANTY Reine: bouillies de soja infantiles (sachets, étuis)
@@ -131,12 +140,62 @@ export const products: readonly Product[] = [
     description: "Bouillie de soja infantile Reine au poisson, à base de maïs et de soja.",
     published: true,
   },
+  // TANTY Prestige: the soy porridges in their 200 g "Prestige" box (texts from the boxes,
+  // studio shoot 2026-10-20; Lactée and Parfumé from the old shop).
+  {
+    id: "tanty-nature",
+    slug: "tanty-nature",
+    name: "TANTY Nature",
+    line: "TANTY Prestige",
+    category: "prestige",
+    formats: [{ label: "Étui Prestige 200 g", packaging: "etui" }],
+    description:
+      "Une bouillie de soja de haute valeur nutritive : un mélange de céréales, source d'énergie, et de fibres alimentaires qui facilitent la digestion.",
+    facts: [
+      { label: "Sur l'emballage", value: "15 vitamines et minéraux, riche en fer et calcium" },
+      { label: "Pour", value: "Enfants et adultes" },
+      { label: "Préparation", value: "À cuire" },
+    ],
+    published: true,
+  },
+  {
+    id: "tanty-arachides",
+    slug: "tanty-arachides",
+    name: "TANTY Arachides",
+    line: "TANTY Prestige",
+    category: "prestige",
+    formats: [{ label: "Étui Prestige 200 g", packaging: "etui" }],
+    description:
+      "Une bouillie de soja de haute valeur nutritive et riche en vitamines : un mélange de céréales, source d'énergie, et de protéines qui développent les muscles.",
+    facts: [
+      { label: "Sur l'emballage", value: "15 vitamines et minéraux, riche en fer et calcium" },
+      { label: "Pour", value: "Enfants et adultes" },
+      { label: "Préparation", value: "À cuire" },
+    ],
+    published: true,
+  },
+  {
+    id: "tanty-poisson",
+    slug: "tanty-poisson",
+    name: "TANTY Poisson",
+    line: "TANTY Prestige",
+    category: "prestige",
+    formats: [{ label: "Étui Prestige 200 g", packaging: "etui" }],
+    description:
+      "Une bouillie de soja de haute valeur nutritive : un mélange de céréales, source d'énergie, et de calcium qui fortifie les os.",
+    facts: [
+      { label: "Sur l'emballage", value: "15 vitamines et minéraux, riche en fer et calcium" },
+      { label: "Pour", value: "Enfants et adultes" },
+      { label: "Préparation", value: "À cuire" },
+    ],
+    published: true,
+  },
   {
     id: "tanty-parfume",
     slug: "tanty-parfume",
     name: "TANTY Parfumé",
-    line: "TANTY",
-    category: "bouillies",
+    line: "TANTY Prestige",
+    category: "prestige",
     formats: [{ label: "Étui Prestige 200 g", packaging: "etui" }],
     description: "La bouillie de soja parfumée aux fruits, quatrième variété des bouillies TANTY, créée en 2006.",
     facts: [{ label: "Composition (2011)", value: "Maïs prégermé, soja, cocktail de fruits" }],
@@ -147,20 +206,29 @@ export const products: readonly Product[] = [
     id: "tanty-lactee",
     slug: "tanty-lactee",
     name: "TANTY Lactée",
-    line: "TANTY",
-    category: "bouillies",
+    line: "TANTY Prestige",
+    category: "prestige",
     formats: [{ label: "Étui Prestige 200 g", packaging: "etui" }],
-    description: "La bouillie de soja lactée TANTY, en étui TANTY Prestige.",
+    // Old shop text (2025): third of the TANTY porridges, 2004, calcium from fish bones.
+    description:
+      "Créée en 2004, troisième des bouillies TANTY. Elle permet une meilleure croissance grâce au calcium contenu dans les arêtes de poisson.",
+    facts: [
+      { label: "Création", value: "2004" },
+      { label: "Sur l'emballage", value: "15 vitamines et minéraux, riche en fer et calcium" },
+      { label: "Pour", value: "Enfants et adultes" },
+      { label: "Préparation", value: "À cuire" },
+    ],
     published: true,
   },
   {
     id: "baby-vita",
     slug: "baby-vita",
     name: "Baby Vita",
-    line: "TANTY",
-    category: "bouillies",
+    line: "Baby Vita",
+    category: "babyvita",
     formats: [{ label: "Seau 1200 g", packaging: "seau" }],
-    description: "Bouillie enrichie à la patate et au moringa, multifruits. La vitalité de l'enfant !",
+    description: "Bouillie enrichie pour assurer une croissance et un éveil continu à vos enfants.",
+    facts: [{ label: "Sur l'emballage", value: "Patate, moringa, multifruits" }],
     published: true,
   },
 
@@ -229,7 +297,7 @@ export const products: readonly Product[] = [
     name: "Arachides enrobées",
     line: "TANTY à Grignoter",
     category: "grignoter",
-    description: "Amuse-gueules croustillants à partager en famille ou entre amis.",
+    description: GRIGNOTER,
     formats: [
       { label: "Mini 45 g", packaging: "mini-sachet" },
       { label: "Moyen 125 g", packaging: "doypack" },
@@ -244,7 +312,7 @@ export const products: readonly Product[] = [
     name: "Arachides caramélisées",
     line: "TANTY à Grignoter",
     category: "grignoter",
-    description: "Amuse-gueules croustillants à partager en famille ou entre amis.",
+    description: GRIGNOTER,
     formats: [
       { label: "Mini 45 g", packaging: "mini-sachet" },
       { label: "Moyen 136 g", packaging: "doypack" },
@@ -257,7 +325,7 @@ export const products: readonly Product[] = [
     name: "Croquettes",
     line: "TANTY à Grignoter",
     category: "grignoter",
-    description: "Amuse-gueules croustillants à partager en famille ou entre amis.",
+    description: GRIGNOTER,
     formats: [
       { label: "Mini 30 g", packaging: "mini-sachet" },
       { label: "Moyen 95 g", packaging: "doypack" },
@@ -271,7 +339,7 @@ export const products: readonly Product[] = [
     name: "Chips de plantain",
     line: "TANTY à Grignoter",
     category: "grignoter",
-    description: "Amuse-gueules croustillants à partager en famille ou entre amis.",
+    description: GRIGNOTER,
     formats: [{ label: "Moyen 80 g", packaging: "doypack" }],
     published: true,
   },
@@ -281,7 +349,7 @@ export const products: readonly Product[] = [
     name: "Beignet soufflé",
     line: "TANTY à Grignoter",
     category: "grignoter",
-    description: "Amuse-gueules croustillants à partager en famille ou entre amis.",
+    description: GRIGNOTER,
     formats: [{ label: "36 g", packaging: "mini-sachet" }],
     published: true,
   },
@@ -313,7 +381,8 @@ export const products: readonly Product[] = [
     line: "TANTY",
     category: "piment",
     formats: [{ label: "200 ml", packaging: "flacon" }],
-    description: "Rehausse vos plats grâce à son goût unique. Facile à utiliser et à conserver.",
+    description:
+      "Le piment de table TANTY rehausse vos plats grâce à son goût unique. Facile à utiliser et à conserver, il accompagne aussi vos réceptions : mariages, baptêmes, anniversaires.",
     facts: [{ label: "Sur l'emballage", value: "Naturel" }],
     published: true,
     featured: true,
@@ -358,7 +427,7 @@ export const products: readonly Product[] = [
       { label: "5 L", packaging: "inconnu" },
       { label: "10 L", packaging: "inconnu" },
     ],
-    description: "Chocolat à tartiner made in Cameroun, fabriqué avec les produits et la main-d'œuvre locale.",
+    description: "Chocolat à tartiner made in Cameroun, fabriqué avec les produits et la main-d'œuvre locale, à tartiner en toute sécurité.",
     published: true,
     featured: true,
   },

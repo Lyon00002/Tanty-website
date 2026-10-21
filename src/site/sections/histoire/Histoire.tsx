@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { company } from "@/data/company";
+import { Photo } from "../../ui/Photo";
 
 /**
  * Une marque d'ici, depuis 2000: the company's story beside two of its own
@@ -33,8 +33,8 @@ export function Histoire() {
             second pose overlapping its lower corner.
             Corporate edges: barely rounded, a thin white cut where they overlap, no frame, no shadow. */}
         <figure className="relative mx-auto w-full max-w-[34rem] pb-20 pl-8 sm:pl-14">
-          <div data-reveal="clip" className="relative aspect-[4/5] overflow-hidden rounded-[2px]">
-            <Image
+          <div data-reveal="clip" className="nid-skeleton relative aspect-[4/5] overflow-hidden rounded-[2px]">
+            <Photo
               src="/brand/histoire/ambassadrice-bras-charges-sourire.webp"
               alt="Une ambassadrice TANTY, en casquette et t-shirt jaunes, les bras chargés de sachets TANTY À Grignoter."
               fill
@@ -43,8 +43,8 @@ export function Histoire() {
             />
           </div>
           <div data-reveal="" className="absolute bottom-0 left-0 w-[44%] overflow-hidden rounded-[2px] border-[3px] border-white bg-white">
-            <div className="relative aspect-[4/5]">
-              <Image
+            <div className="nid-skeleton relative aspect-[4/5]">
+              <Photo
                 src="/brand/histoire/ambassadrice-deux-sachets.webp"
                 alt="Une ambassadrice TANTY présente deux sachets TANTY À Grignoter."
                 fill
