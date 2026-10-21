@@ -140,7 +140,7 @@ export function Campagnes() {
                     <Link
                       href={href}
                       aria-label={`${c.alt} Voir les produits ${range.name}.`}
-                      className="pointer-events-auto relative block h-[calc(100svh-6.5rem)] overflow-hidden rounded-2xl bg-[var(--nid-green-deep)] shadow-xl sm:h-[calc(100svh-7.5rem)] md:h-[min(44rem,calc(100svh-7.5rem))] lg:h-[min(44rem,calc(100svh-10rem))] lg:rounded-3xl lg:shadow-2xl"
+                      className="pointer-events-auto relative block h-[calc(100svh-6.5rem)] overflow-hidden rounded-2xl bg-[var(--nid-green-deep)] shadow-xl sm:h-[calc(100svh-7.5rem)] md:h-[min(44rem,calc(100svh-7.5rem))] lg:h-[min(40rem,calc(100svh-11rem))] lg:rounded-3xl lg:shadow-2xl"
                     >
                       {/* Phone: the portrait visual fills the card when there is one */}
                       {c.srcMobile && (
