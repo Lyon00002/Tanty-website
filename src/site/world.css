@@ -1,0 +1,793 @@
+/* Component styles of the Nid world (tokens live in tokens.css). */
+
+/* Navigation and footer links: on hover or keyboard focus, the yellow swoosh
+   of the hero titles (the logo ribbon) draws in from the left under the word. */
+.nid-navlink,
+.nid-swoosh-link {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%23fecc00'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 0.45em;
+  padding-bottom: 0.2em;
+  text-decoration: none;
+  transition: background-size 0.35s var(--nid-ease-out);
+}
+
+.nid-navlink {
+  font-weight: 600;
+}
+
+.nid-navlink:hover,
+.nid-navlink:focus-visible,
+.nid-swoosh-link:hover,
+.nid-swoosh-link:focus-visible,
+a:hover .nid-swoosh-link,
+a:focus-visible .nid-swoosh-link {
+  background-size: 100% 0.45em;
+}
+
+/* Main bar (Olam-like). On the home page it is fixed and hidden above the
+   viewport, drops in once the hero menu has scrolled away, and its links
+   come in one by one. Elsewhere it is a plain sticky bar. */
+.nid-nav {
+  background: #ffffff;
+  box-shadow: 0 10px 30px -22px rgb(15 40 20 / 0.45);
+}
+
+.nid-nav-row {
+  height: 64px;
+}
+
+.nid-nav-reveal {
+  transform: translateY(-100%);
+  transition:
+    transform 0.5s var(--nid-ease-out),
+    visibility 0s linear 0.5s;
+  visibility: hidden;
+}
+
+.nid-nav-reveal[data-shown="true"] {
+  transform: none;
+  visibility: visible;
+  transition:
+    transform 0.5s var(--nid-ease-out),
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nid-nav-reveal[data-shown="true"] .nid-nav-item {
+    animation: nid-nav-in 0.55s var(--nid-ease-out) both;
+    animation-delay: calc(var(--i, 0) * 80ms + 180ms);
+  }
+}
+
+@keyframes nid-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Mobile menu: the panel unrolls from the button like a mat. */
+.nid-menu {
+  clip-path: circle(0% at calc(100% - 2.6rem) 2.2rem);
+  visibility: hidden;
+  transition:
+    clip-path 0.55s var(--nid-ease-out),
+    visibility 0s linear 0.55s;
+}
+
+.nid-menu[data-open="true"] {
+  clip-path: circle(150% at calc(100% - 2.6rem) 2.2rem);
+  visibility: visible;
+  transition:
+    clip-path 0.6s var(--nid-ease-out),
+    visibility 0s;
+}
+
+.nid-menu-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.35s var(--nid-ease-out),
+    transform 0.45s var(--nid-ease-out);
+}
+
+.nid-menu[data-open="true"] .nid-menu-item {
+  opacity: 1;
+  transform: none;
+}
+
+/* Section rhythm: generous, minimal (one value for every section). */
+.nid-section {
+  padding-block: clamp(5rem, 3.5rem + 4vw, 7rem);
+}
+
+/* In the components layer so utilities (px-*, min-w-*, hidden) can adjust a button. */
+@layer components {
+  /* Buttons (Olam-like corporate): rectangular, flat, fixed minimum width. */
+  .nid-btn {
+    display: inline-flex;
+    min-height: 3rem;
+    min-width: 12.5rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+      background-color 0.2s var(--nid-ease-out),
+      color 0.2s var(--nid-ease-out),
+      border-color 0.2s var(--nid-ease-out);
+  }
+  
+  .nid-btn-primary {
+    background: var(--nid-green);
+    color: #ffffff;
+  }
+  
+  .nid-btn-primary:hover {
+    background: var(--nid-green-deep);
+  }
+  
+  .nid-btn-outline {
+    border: 2px solid currentColor;
+    color: var(--nid-green-deep);
+  }
+  
+  .nid-btn-outline:hover {
+    background: var(--nid-green-deep);
+    border-color: var(--nid-green-deep);
+    color: #ffffff;
+  }
+  
+  .nid-btn-yellow {
+    background: var(--nid-yellow);
+    color: var(--nid-green-deep);
+  }
+
+  .nid-btn-yellow:hover {
+    background: var(--nid-green-deep);
+    color: var(--nid-yellow);
+  }
+
+  .nid-btn-light {
+    background: #ffffff;
+    color: var(--nid-green-deep);
+  }
+  
+  .nid-btn-light:hover {
+    background: var(--nid-yellow);
+  }
+}
+
+/* Two-tone titles: dark lead, the closing words in TANTY green. Only the
+   hero and the contact band underline them with the swoosh drawn from the
+   logo ribbon (.nid-swoosh: tapered ends, gentle rise); the hero draws it at
+   each slide, the contact title as it scrolls in. */
+.nid-accent {
+  color: var(--nid-green);
+}
+
+.nid-swoosh {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%23fecc00'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.5em;
+  padding-bottom: 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Dark band ("Explorez nos gammes"): white lead, closing words and full stop in TANTY yellow. */
+.nid-on-deep .nid-title {
+  color: #ffffff;
+}
+
+.nid-on-deep .nid-accent {
+  color: var(--nid-yellow);
+}
+
+.nid-on-deep .nid-lead {
+  color: rgb(255 255 255 / 0.86);
+}
+
+/* Yellow band (contact): the title in white over a deep green swoosh. */
+.nid-on-yellow .nid-title,
+.nid-on-yellow .nid-accent {
+  color: #ffffff;
+}
+
+.nid-on-yellow .nid-swoosh {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%230f3a1e'/%3E%3C/svg%3E");
+}
+
+/* Brand portfolio veil: dense behind the text, lighter behind the bubbles. */
+.nid-portfolio-veil {
+  background: linear-gradient(90deg, rgb(15 58 30 / 0.96) 0%, rgb(15 58 30 / 0.92) 45%, rgb(15 58 30 / 0.84) 100%);
+}
+
+/* Inner page band veil: as dense behind the text, opening on the right so
+   the TANTY photograph shows, as the hero film does under its green shade. */
+.nid-page-veil {
+  background: linear-gradient(90deg, rgb(15 58 30 / 0.96) 0%, rgb(15 58 30 / 0.9) 42%, rgb(15 58 30 / 0.58) 100%);
+}
+
+@media (max-width: 1023.98px) {
+  .nid-page-veil {
+    background: rgb(15 58 30 / 0.9);
+  }
+}
+
+@keyframes nid-swoosh {
+  from {
+    background-size: 0% 0.5em;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .nid-title .nid-swoosh {
+      animation: nid-swoosh linear both;
+      animation-timeline: view();
+      animation-range: entry 30% entry 100%;
+    }
+  }
+}
+
+/* Bento cells: revealed once when the grid enters the viewport (BentoReveal). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal][data-armed="true"] [data-cell] {
+    opacity: 0;
+    transition:
+      opacity 0.7s var(--nid-ease-out),
+      transform 0.9s var(--nid-ease-out);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  [data-reveal="rise"][data-armed="true"] [data-cell] {
+    transform: translateY(28px);
+  }
+
+  [data-reveal="slide"][data-armed="true"] [data-cell] {
+    transform: translateX(32px);
+  }
+
+  [data-reveal][data-armed="true"][data-revealed="true"] [data-cell] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Range orbit ("Explorez nos gammes"). Every range rides one ellipse (the
+   logo ribbon): its angle is --base (its seat) + --nid-orbit-turn (the whole
+   orbit, turned by the category filter) + --nid-orbit-enter (the entrance,
+   at every visit). Registered angles animate, so the ranges travel along the
+   ellipse. Position and size come from sin/cos of that angle: the ranges at
+   the front (90deg) are the largest. */
+@property --nid-orbit-turn {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --nid-orbit-enter {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+.nid-orbit {
+  --nid-orbit-enter: 0deg;
+}
+
+.nid-orbit-item {
+  --a: calc(var(--base) + var(--nid-orbit-turn) + var(--nid-orbit-enter));
+  position: absolute;
+  left: calc(50% + 44% * cos(var(--a)));
+  top: calc(50% + 40% * sin(var(--a)));
+  width: calc(15% + 6.5% * (1 + sin(var(--a))) / 2);
+  translate: -50% -50%;
+}
+
+/* Ranges outside the chosen category step back: smaller, greyed, still opaque. */
+.nid-orbit-item[data-on="false"] {
+  scale: 0.86;
+  filter: saturate(0) brightness(0.5);
+  pointer-events: none;
+}
+
+.nid-bubble {
+  transition: scale 0.4s var(--nid-ease-out);
+}
+
+a:hover > .nid-bubble,
+a:focus-visible > .nid-bubble {
+  scale: 1.07;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nid-orbit {
+    transition:
+      --nid-orbit-turn 1.1s cubic-bezier(0.65, 0, 0.35, 1),
+      --nid-orbit-enter 1.6s var(--nid-ease-out);
+  }
+
+  .nid-orbit[data-seen="false"] {
+    --nid-orbit-enter: -120deg;
+  }
+
+  .nid-orbit-item {
+    transition:
+      opacity 0.6s var(--nid-ease-out),
+      scale 0.6s var(--nid-ease-out),
+      filter 0.6s var(--nid-ease-out);
+  }
+
+  .nid-orbit[data-seen="false"] .nid-orbit-item {
+    opacity: 0;
+  }
+
+  .nid-orbit[data-seen="true"] .nid-orbit-item {
+    transition-delay: calc(var(--i, 0) * 70ms), 0ms, 0ms;
+  }
+
+  .nid-orbit-ribbon,
+  .nid-orbit-core {
+    transition:
+      opacity 0.9s var(--nid-ease-out),
+      scale 1.1s var(--nid-ease-out);
+  }
+
+  .nid-orbit[data-seen="false"] .nid-orbit-ribbon,
+  .nid-orbit[data-seen="false"] .nid-orbit-core {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+
+/* The logo ribbon around a subject (RibbonRing parts: a product photo, a
+   range bubble). Its back (top half) passes behind the subject, its front
+   (bottom half) across it. At every visit ([data-seen], useSeen) it draws
+   itself around: along the front from the left, then round the back. */
+.nid-wrap-ring[data-part="back"] {
+  clip-path: inset(0 0 50% 0);
+}
+
+.nid-wrap-ring[data-part="front"] {
+  clip-path: inset(50% 0 0 0);
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .nid-wrap-ring {
+    transition: clip-path 0.75s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  [data-seen="true"] > .nid-wrap-ring[data-part="back"] {
+    transition-delay: 0.6s;
+  }
+
+  [data-seen="false"] > .nid-wrap-ring[data-part="front"] {
+    clip-path: inset(50% 100% 0 0);
+  }
+
+  [data-seen="false"] > .nid-wrap-ring[data-part="back"] {
+    clip-path: inset(0 0 50% 100%);
+  }
+}
+
+/* Section titles end on a green full stop, like their closing words
+   (TANTY yellow on the dark band, deep green on the yellow band). */
+.nid-dot {
+  color: var(--nid-green);
+}
+
+.nid-on-deep .nid-dot {
+  color: var(--nid-yellow);
+}
+
+.nid-on-yellow .nid-dot {
+  color: var(--nid-green-deep);
+}
+
+/* Products showcase: the large view settles in when another product is pointed at. */
+@keyframes nid-swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nid-swap-in {
+    animation: nid-swap-in 0.5s var(--nid-ease-out) both;
+  }
+}
+
+/* Very large screens: the whole layout scales up (everything is set in rem)
+   and the content column widens, so the page keeps the proportions it has at
+   1440 px instead of floating in wide white margins. Percentages keep the
+   visitor's own base font size in charge. */
+@media (min-width: 1920px) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
+@media (min-width: 2400px) {
+  html {
+    font-size: 125%;
+  }
+
+  .w-nid {
+    --nid-max: 104rem;
+  }
+}
+
+/* Le chemin du soleil (section "Notre parcours", after the "Matin" proposal).
+   Wide screens: one column per milestone, no gaps (each sun sits on its
+   column's left edge, where the arc passes); the sky band is --sky tall and
+   each sun stands at its height --h (0 = horizon, 1 = highest), its text
+   hanging below it. Small screens: a dotted line going down. */
+.nid-sun {
+  display: block;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 50%;
+  background: var(--nid-yellow);
+  box-shadow: 0 0 0 6px rgb(254 204 0 / 0.22);
+}
+
+.nid-sun-high {
+  width: 1.875rem;
+  height: 1.875rem;
+  box-shadow:
+    0 0 0 8px rgb(254 204 0 / 0.22),
+    0 0 70px 34px rgb(254 204 0 / 0.22);
+}
+
+.nid-sunpath {
+  display: grid;
+  gap: 2.25rem;
+  padding-left: 2.75rem;
+}
+
+.nid-sunpath::before {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  border-left: 3px dotted var(--nid-yellow);
+  /* Drawn down with the scroll (--draw, 0 to 1, set by SunPath). */
+  clip-path: inset(0 0 calc((1 - var(--draw, 1)) * 100%) 0);
+}
+
+.nid-sunpath-arc {
+  display: none;
+}
+
+.nid-sunpath-step {
+  position: relative;
+}
+
+.nid-sunpath-step .nid-sun {
+  position: absolute;
+  left: calc(-2.75rem + 0.725rem);
+  top: 0.25rem;
+  translate: -50% 0;
+}
+
+@media (min-width: 1024px) {
+  .nid-sunpath {
+    --sky: 9rem;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    gap: 0;
+    padding-left: 0;
+  }
+
+  .nid-sunpath::before {
+    display: none;
+  }
+
+  .nid-sunpath-arc {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: var(--sky);
+    overflow: visible;
+  }
+
+  .nid-sunpath-step {
+    padding-right: 1.5rem;
+    padding-top: calc(var(--sky) * (1 - 0.92 * var(--h)) + 1.75rem);
+  }
+
+  .nid-sunpath-step .nid-sun {
+    left: 0;
+    top: calc(var(--sky) * (1 - 0.92 * var(--h)));
+    translate: -50% -50%;
+  }
+}
+
+/* Menu bar: the hero swoosh draws in under a hovered or open item. */
+.nid-barlink {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%23fecc00'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% - 0.55rem);
+  background-size: 0% 0.4em;
+  transition: background-size 0.35s var(--nid-ease-out);
+}
+
+.nid-barlink:hover,
+.nid-barlink:focus-visible,
+.nid-barlink[data-open="true"] {
+  background-size: 100% 0.4em;
+}
+
+/* Words over the film (desktop): white title, closing words and full stop in
+   TANTY yellow over a white swoosh; the second button outlined in white. */
+.nid-hero-outline {
+  border: 2px solid var(--nid-green-deep);
+  color: var(--nid-green-deep);
+}
+
+@media (min-width: 1024px) {
+  .nid-hero-copy .nid-accent,
+  .nid-hero-copy .nid-dot {
+    color: var(--nid-yellow);
+  }
+
+  .nid-hero-copy .nid-swoosh {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%23ffffff'/%3E%3C/svg%3E");
+  }
+
+  .nid-hero-outline {
+    border-color: rgb(255 255 255 / 0.85);
+    color: #ffffff;
+  }
+
+  .nid-hero-outline:hover {
+    background: #ffffff;
+    color: var(--nid-green-deep);
+  }
+}
+
+/* "Nos produits" stack: each product in a flat card, as the site's cards
+   (white, hairline border, diagonal corners), no elevation. The product shown
+   large, and the one under the pointer, take a yellow border and tint. */
+.nid-product-card {
+  border: 1px solid rgb(17 36 26 / 0.12);
+  border-radius: 0 1.5rem;
+  background: #ffffff;
+  padding: 0.75rem 1rem 0.75rem 0.75rem;
+  transition:
+    border-color 0.25s var(--nid-ease-out),
+    background-color 0.25s var(--nid-ease-out);
+}
+
+.nid-product-card:hover,
+.nid-product-card:focus-visible,
+.nid-product-card[data-on="true"] {
+  border-color: var(--nid-yellow);
+  background: rgb(254 204 0 / 0.08);
+}
+
+@media (max-width: 1023.98px) {
+  .nid-product-card[data-on="true"]:not(:hover) {
+    border-color: rgb(17 36 26 / 0.12);
+    background: #ffffff;
+  }
+}
+
+/* "À l'affiche": cards laid one on the other, in 3D.
+   --h: the scroll each card owns (its wrapper, one screen under the bar);
+   --top: where the cards stick; --step: how far each card sits below the
+   previous one, so the edges of the pile show. */
+.nid-stack {
+  --h: calc(100svh - 4rem);
+  --top: 4rem;
+  --step: 12px;
+  overflow-x: clip;
+}
+
+@media (min-width: 640px) {
+  .nid-stack {
+    --h: calc(100svh - 5rem);
+    --top: 5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nid-stack {
+    --step: 24px;
+  }
+}
+
+/* Invisible marker at card k's place in the flow: its view timeline follows
+   the card's approach without being frozen by sticky. */
+.nid-stack-mark {
+  position: absolute;
+  left: 0;
+  top: calc(var(--k) * var(--h));
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.nid-stack-land {
+  transform: translate3d(0, calc(var(--k) * var(--step)), 0);
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.nid-stack-dim {
+  position: absolute;
+  inset: 0;
+  background: rgb(9 34 18);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Comes in smaller (from its top edge) and grows as it settles onto the top
+   of the pile: full size only once in place. No 3D rotation. */
+@keyframes nid-land {
+  0% {
+    transform: translate3d(0, calc(var(--k) * var(--step)), 0) scale(0.92);
+  }
+  100% {
+    transform: translate3d(0, calc(var(--k) * var(--step)), 0) scale(1);
+  }
+}
+
+@keyframes nid-dim {
+  to {
+    opacity: 0.38;
+  }
+}
+
+/* Each animation runs on a card's approach timeline (set inline): from the
+   moment the card enters at the bottom to the moment it sticks on the pile. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (timeline-scope: --a) and (animation-timeline: view()) {
+    .nid-stack-land {
+      animation: nid-land linear both;
+      animation-range: cover 10% cover calc(100% - var(--top));
+    }
+
+    .nid-stack-dim[data-next] {
+      animation: nid-dim linear both;
+      animation-range: cover 10% cover calc(100% - var(--top));
+    }
+  }
+}
+
+/* Entrances (RevealRoot): elements marked data-reveal wait out of sight
+   until RevealRoot plays their entrance as they reach the screen. "" rises
+   and fades, "fade" only fades, "clip" opens from the top like a blind.
+   Held back only when scripts run and motion is welcome. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+
+  [data-reveal="fade"] {
+    transform: none;
+  }
+
+  [data-reveal="clip"] {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+/* Welcome card (music): the veil fades in, the card rises in. */
+@keyframes nid-welcome-veil {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes nid-welcome-card {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nid-welcome-veil {
+    animation: nid-welcome-veil 0.5s var(--nid-ease-out) both;
+  }
+
+  .nid-welcome-card {
+    animation: nid-welcome-card 0.7s 0.1s var(--nid-ease-out) both;
+  }
+}
+
+/* One icon weight across the site: every Lucide icon strokes at 1.75. */
+.w-nid .lucide {
+  stroke-width: 1.75;
+}
+
+/* News carousel: the track runs past the content edge to the screen's right
+   edge (--nid-bleed), so the next card peeks in; arrows sit on the photos'
+   midline (--news-img-h). */
+.nid-news {
+  --nid-bleed: calc(max(0px, (100vw - var(--nid-max)) / 2) + var(--nid-gutter));
+  --news-img-h: clamp(13rem, 21vw, 19rem);
+}
+
+.nid-news-track {
+  scroll-padding-inline-start: 0;
+}
+
+/* Sideways rows without a visible scrollbar (swipe drives them). */
+.nid-noscrollbar {
+  scrollbar-width: none;
+}
+
+.nid-noscrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Product cards */
+.nid-card h3 {
+  transition: color 0.2s var(--nid-ease-out);
+}
+
+.nid-card:hover h3 {
+  color: var(--nid-green);
+}
+
+.nid-card:focus-within {
+  outline: 3px solid var(--nid-green-deep);
+  outline-offset: 4px;
+}
+
+.nid-card a:focus-visible {
+  outline: none;
+}
+
+/* Hero photo: cut by the ellipse arc of the TANTY logo ribbon (logoArc.ts). */
+.nid-hero-photo {
+  clip-path: var(--arc-m);
+}
+
+@media (min-width: 1024px) {
+  .nid-hero-photo {
+    clip-path: var(--arc-d);
+  }
+}
+
+/* Hero photo (desktop): its left edge is tied to the content column, not to the
+   screen, so text and photo keep the same relationship at every width: the
+   photo starts halfway (44 % from 1280 px) into the content column, clear of
+   the hero menu, and runs off the right edge of the screen. */
+@media (min-width: 1024px) {
+  .nid-hero-media {
+    --col-left: calc(max(0px, (100% - var(--nid-max)) / 2) + var(--nid-gutter));
+    --col-width: calc(min(100%, var(--nid-max)) - 2 * var(--nid-gutter));
+    left: calc(var(--col-left) + var(--col-width) * 0.5);
+  }
+}
+
+@media (min-width: 1280px) {
+  .nid-hero-media {
+    left: calc(var(--col-left) + var(--col-width) * 0.44);
+  }
+}
+
+/* Hero bottom border: starts at the content's left edge, runs off the right of the screen. */
+.nid-hero-base {
+  left: calc(max(0px, (100% - var(--nid-max)) / 2) + var(--nid-gutter));
+}
+

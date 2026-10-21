@@ -1,0 +1,181 @@
+/*
+ * Piste B : Le Nid du Tisserin.
+ * World tokens, scoped on .w-nid. Brand logo colors come from
+ * src/styles/tokens.css; these are the materials of the woven world.
+ */
+
+.w-nid {
+  /* Plumage and grass */
+  --nid-yellow: #fecc00;
+  --nid-grass: #4ba83d;
+  --nid-grass-soft: #86cf5e;
+  --nid-green: #1b6430;
+  --nid-green-deep: #0f3a1e;
+  --nid-straw: #e9cf7a;
+  --nid-straw-dry: #c8a047;
+  --nid-mask: #1a1c14;
+  --nid-chestnut: #9a5a1e;
+
+  /* The red of the eye stays on the bird. */
+  --nid-red: #e42a28;
+  /* Actions: deep TANTY green, readable on yellow, straw and grass (client choice, 2026-10-20). */
+  --nid-action: #0f3a1e;
+  --nid-action-hover: #1b6430;
+
+  --nid-white: #ffffff;
+  --nid-ink: #11241a;
+  --nid-ink-soft: #2c3f2f;
+  --nid-cream: #fff6d6;
+  --nid-cream-soft: #e6dcb4;
+
+  --nid-focus: var(--nid-green-deep);
+
+  --nid-font-display: var(--font-nid-display), "Franklin Gothic Medium", "Arial Narrow", sans-serif;
+  --nid-font-body: var(--font-nid-display), system-ui, sans-serif;
+
+  --nid-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Content column: wide enough to use laptop and desktop screens (1512, 1728 px)
+     without large side margins; the gutter grows a little with the screen. */
+  --nid-gutter: clamp(1rem, 5vw, 5rem);
+  --nid-max: 96rem;
+
+  /* Corporate ground (Nestlé-like): white pages, photography and brand color in bands. */
+  --nid-tint: #fff8d9;
+  --nid-line: #e7e2cf;
+
+  font-family: var(--nid-font-body);
+  color: var(--nid-ink);
+  background: var(--nid-white);
+  overflow-x: clip;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-feature-settings: "kern", "liga";
+}
+
+body:has(.w-nid) {
+  background: var(--nid-white);
+}
+
+html:has(.w-nid) {
+  scrollbar-color: var(--nid-green) var(--nid-straw);
+  accent-color: var(--nid-green);
+  caret-color: var(--nid-green);
+}
+
+.w-nid ::selection {
+  background: var(--nid-green);
+  color: var(--nid-yellow);
+}
+
+.w-nid :focus-visible {
+  outline: 3px solid var(--nid-focus);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* Surfaces: each row of the weave sets its own ink and focus color. */
+.nid-on-white {
+  background: var(--nid-white);
+  color: var(--nid-ink);
+  --nid-focus: var(--nid-green-deep);
+}
+
+.nid-on-tint {
+  background: var(--nid-tint);
+  color: var(--nid-ink);
+  --nid-focus: var(--nid-green-deep);
+}
+
+.nid-on-yellow {
+  background: var(--nid-yellow);
+  color: var(--nid-ink);
+  --nid-focus: var(--nid-green-deep);
+}
+
+.nid-on-deep {
+  background: var(--nid-green-deep);
+  color: var(--nid-cream);
+  --nid-focus: var(--nid-yellow);
+}
+
+.nid-on-deep ::selection {
+  background: var(--nid-yellow);
+  color: var(--nid-green-deep);
+}
+
+.nid-on-grass {
+  background: var(--nid-grass);
+  color: var(--nid-ink);
+  --nid-focus: var(--nid-green-deep);
+}
+
+.nid-on-straw {
+  background: var(--nid-straw);
+  color: var(--nid-ink);
+  --nid-focus: var(--nid-green-deep);
+}
+
+.nid-wrap {
+  width: 100%;
+  max-width: var(--nid-max);
+  margin-inline: auto;
+  padding-inline: var(--nid-gutter);
+}
+
+.nid-display {
+  font-family: var(--nid-font-display);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.nid-title {
+  font-family: var(--nid-font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 1.4rem + 2vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--nid-ink);
+  text-wrap: balance;
+}
+
+.nid-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+  max-width: 34rem;
+}
+
+.nid-link {
+  color: inherit;
+  font-weight: 700;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.24em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: text-decoration-color 0.2s, text-underline-offset 0.2s var(--nid-ease-out);
+}
+
+.nid-link:hover {
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.3em;
+}
+
+.nid-num {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Decorative layers never catch the pointer. */
+.nid-deco {
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-nid *,
+  .w-nid *::before,
+  .w-nid *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

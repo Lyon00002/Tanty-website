@@ -1,0 +1,22 @@
+/*
+ * TANTY brand tokens shared by every page.
+ *
+ * The three logo colors are MEASURED on archived raster files (see
+ * ~/projets/tanty-3d/references/INVENTAIRE.md, section 4). They are close
+ * approximations, not published brand values: replace them when NTFoods
+ * provides its official color references.
+ */
+:root {
+  /* Logo (measured) */
+  --tanty-yellow: #fecc00;
+  --tanty-green: #1b6430;
+  --tanty-green-deep: #0b4609;
+  --tanty-red: #e42a28;
+  --tanty-red-orange: #d64607;
+  --tanty-since: #b56a08;
+
+  /* Neutral defaults, overridden by each visual world */
+  --tanty-paper: #fbfcf8;
+  --tanty-ink: #13261a;
+  --tanty-focus: #1d4ed8;
+}
