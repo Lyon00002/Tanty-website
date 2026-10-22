@@ -5,6 +5,8 @@ import { HOME_ONLY, RANGES_OPEN, STORE_OPEN } from "./src/site/config";
 const CLOSED_PAGES = [...(STORE_OPEN ? [] : ["/produits", "/produits/:slug"]), ...(RANGES_OPEN ? [] : ["/gammes/:slug"])];
 
 const nextConfig: NextConfig = {
+  // Development only: lets a phone on the same Wi-Fi open the dev server by the Mac's address.
+  allowedDevOrigins: ["192.168.10.93"],
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

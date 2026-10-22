@@ -19,14 +19,14 @@ export function FormatOrder({ product }: { product: Product }) {
   return (
     <div>
       <fieldset>
-        <legend className="font-semibold">{multiple ? "Choisissez un format" : "Format"}</legend>
+        <legend className="text-[0.875rem] font-semibold sm:text-base">{multiple ? "Choisissez un format" : "Format"}</legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {product.formats.map((f) => {
             const checked = f.label === format;
             return (
               <label
                 key={f.label}
-                className={`nid-num relative inline-flex min-h-11 cursor-pointer items-center rounded-[4px] border px-4 py-2 transition-colors duration-200 has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--nid-green-deep)] ${
+                className={`nid-num relative inline-flex min-h-10 cursor-pointer items-center rounded-[4px] border px-3 py-1.5 text-[0.875rem] transition-colors sm:min-h-11 sm:px-4 sm:py-2 sm:text-base duration-200 has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--nid-green-deep)] ${
                   checked
                     ? "border-[var(--nid-yellow)] bg-[var(--nid-yellow)] font-semibold text-[var(--nid-green-deep)]"
                     : "border-[var(--nid-ink)]/25 text-[var(--nid-ink)] hover:border-[var(--nid-green)]"
@@ -39,11 +39,11 @@ export function FormatOrder({ product }: { product: Product }) {
           })}
         </div>
       </fieldset>
-      <Action href={whatsappOrderUrl(product, format)} className="mt-8">
+      <Action href={whatsappOrderUrl(product, format)} className="mt-6 sm:mt-8">
         <MessageCircle aria-hidden="true" className="size-5" />
         Commander sur WhatsApp
       </Action>
-      <p className="mt-3 text-sm text-[var(--nid-ink-soft)]">Prix et disponibilité : TANTY vous répond sur WhatsApp.</p>
+      <p className="mt-2.5 text-[0.75rem] text-[var(--nid-ink-soft)] sm:mt-3 sm:text-sm">Prix et disponibilité : TANTY vous répond sur WhatsApp.</p>
     </div>
   );
 }

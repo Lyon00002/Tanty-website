@@ -40,7 +40,7 @@ export function RangeProducts({ range }: { range: Category }) {
             </div>
           </article>
         ) : (
-          <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
+          <ul className="mt-10 grid grid-cols-3 gap-x-2.5 gap-y-5 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
             {products.map((p) => (
               <li key={p.id} data-reveal="" className="flex">
                 <ProductCard product={p} />

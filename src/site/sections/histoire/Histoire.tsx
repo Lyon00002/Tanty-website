@@ -32,7 +32,7 @@ export function Histoire() {
         {/* Two advertising photographs nested (not the hero's): the ambassador with her arms full (large), a
             second pose overlapping its lower corner.
             Corporate edges: barely rounded, a thin white cut where they overlap, no frame, no shadow. */}
-        <figure className="relative mx-auto w-full max-w-[34rem] pb-20 pl-8 sm:pl-14">
+        <figure className="relative mx-auto w-full max-w-[26rem] pb-14 pl-10 sm:max-w-[34rem] sm:pb-20 sm:pl-14">
           <div data-reveal="clip" className="nid-skeleton relative aspect-[4/5] overflow-hidden rounded-[2px]">
             <Photo
               src="/brand/histoire/ambassadrice-bras-charges-sourire.webp"

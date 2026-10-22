@@ -17,7 +17,7 @@ interface ProductImageProps {
  * "Photo à venir". Never a fake pack. Inside a `group`, the photo leans in on hover.
  */
 export function ProductImage({ product, className, sizes = "(min-width: 1024px) 22vw, 50vw" }: ProductImageProps) {
-  const frame = `relative aspect-[4/5] w-full overflow-hidden rounded-[0_2rem] bg-[#eef2f4] ${className ?? ""}`;
+  const frame = `relative aspect-[4/5] w-full overflow-hidden rounded-[0_1.25rem] bg-[#eef2f4] sm:rounded-[0_2rem] ${className ?? ""}`;
   // Official photo dropped in public/products/<slug>/1.webp (or set in products.ts).
   const photo = getMainProductPhoto(product);
   if (photo) {
@@ -35,9 +35,9 @@ export function ProductImage({ product, className, sizes = "(min-width: 1024px) 
   }
   const kind = primaryPackaging(product);
   return (
-    <div className={`${frame} flex flex-col items-center justify-center gap-4 p-4`}>
+    <div className={`${frame} flex flex-col items-center justify-center gap-2 p-2 sm:gap-4 sm:p-4`}>
       <PackagingIcon kind={kind} className="h-auto w-[30%] max-w-24" />
-      <p className="text-sm text-[var(--nid-ink-soft)]">
+      <p className="text-center text-[0.6875rem] text-[var(--nid-ink-soft)] sm:text-sm">
         Photo à venir<span className="sr-only">, emballage : {PACKAGING_LABEL[kind]}</span>
       </p>
     </div>

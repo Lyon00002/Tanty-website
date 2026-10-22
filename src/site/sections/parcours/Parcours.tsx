@@ -48,7 +48,7 @@ export function Parcours() {
           </div>
 
           {/* Photos on the wall */}
-          <div className="relative mx-auto w-full max-w-[34rem] pb-24 lg:order-first lg:ml-0">
+          <div className="relative mx-auto w-full max-w-[34rem] pb-16 lg:order-first lg:ml-0 lg:pb-24">
             {PHOTOS.map((p, i) => (
               <figure
                 key={p.src}
@@ -81,7 +81,7 @@ export function Parcours() {
           </div>
         </div>
 
-        <div className="mt-20 lg:mt-24">
+        <div className="mt-12 lg:mt-24">
           <SunPath items={MILESTONES} />
         </div>
       </div>

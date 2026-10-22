@@ -26,15 +26,15 @@ export function Commander() {
           <h2 data-reveal="" id="nid-order-title" className="nid-title">
             Nous <span className="nid-accent nid-swoosh">contacter</span><span className="nid-dot">.</span>
           </h2>
-          <p data-reveal="" className="nid-lead mx-auto mt-6 max-w-[38rem]">
+          <p data-reveal="" className="nid-lead mx-auto mt-4 max-w-[38rem] sm:mt-6">
             Notre service client répond à vos questions et prend vos commandes sur WhatsApp ou par téléphone.
           </p>
-          <div data-reveal="" className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-            <Action href={whatsappContactUrl()}>
+          <div data-reveal="" className="mt-7 flex justify-center gap-2.5 sm:mt-10 sm:gap-3">
+            <Action href={whatsappContactUrl()} className="flex-1 sm:flex-none">
               <MessageCircle aria-hidden="true" className="size-5" />
-              Écrire sur WhatsApp
+              <span className="hidden sm:inline">Écrire sur</span> WhatsApp
             </Action>
-            <Action href={`tel:${company.phone.e164}`} variant="outline" className="nid-num">
+            <Action href={`tel:${company.phone.e164}`} variant="outline" className="nid-num flex-1 sm:flex-none">
               <Phone aria-hidden="true" className="size-5" />
               {company.phone.display}
             </Action>

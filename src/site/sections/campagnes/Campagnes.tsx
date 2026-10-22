@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRef, type CSSProperties } from "react";
 import { getCategory, type CategoryId } from "@/data/categories";
@@ -10,14 +9,12 @@ import { Photo } from "../../ui/Photo";
 
 interface Campaign {
   range: CategoryId;
-  /** Wide visual (desktop and tablet), shown whole. */
+  /** Wide visual. */
   src: string;
-  /** Portrait visual for phones (9:16, 1080 × 1920 or more), shown full card. Until it exists, the wide one is used. */
-  srcMobile?: string;
   /**
-   * Desktop framing while the visuals are wider than the card (2.38:1 in a
-   * 16:10 card): the wide visual fills the card and this keeps its key part
-   * in view (CSS object-position). To drop once 16:10 visuals are supplied.
+   * Framing while the visuals are wider than the card (2.38:1 in a 2:1
+   * card): the visual fills the card and this keeps its key part in view
+   * (CSS object-position).
    */
   focus: string;
   alt: string;
@@ -50,7 +47,8 @@ const rise = (k: number) => `--nid-rise-${k}`;
 
 /**
  * À l'affiche: the three campaign visuals as a pile of cards laid one on
- * the other. Each card owns a screen of scroll and sticks near the top.
+ * the other. Each card owns a screen of scroll and sticks near the top
+ * (phones and tablets: the same wide card in miniature, owning a little scroll).
  *
  * The landing: every card has its own timeline, from the moment it
  * enters at the bottom of the screen to the moment it settles on the pile
@@ -131,7 +129,7 @@ export function Campagnes() {
           return (
             <div
               key={c.range}
-              className="pointer-events-none sticky top-16 flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center sm:top-20 sm:min-h-[calc(100svh-5rem)]"
+              className="pointer-events-none sticky top-16 flex min-h-[var(--h)] flex-col items-center justify-center sm:top-20"
               style={{ zIndex: k + 1 }}
             >
               {/* As wide as the section's content: only its side padding around (as the title above) */}
@@ -141,29 +139,17 @@ export function Campagnes() {
                     <Link
                       href={href}
                       aria-label={`${c.alt} Voir les produits ${range.name}.`}
-                      className="pointer-events-auto relative block h-[var(--card)] overflow-hidden rounded-2xl bg-[var(--nid-green-deep)] shadow-xl lg:rounded-3xl lg:shadow-2xl"
+                      className="pointer-events-auto relative block h-[var(--card)] overflow-hidden rounded-xl bg-[var(--nid-green-deep)] shadow-lg sm:rounded-2xl sm:shadow-xl lg:rounded-3xl lg:shadow-2xl"
                     >
-                      {/* Phone: the portrait visual fills the card when there is one */}
-                      {c.srcMobile && (
-                        <span className="nid-skeleton absolute inset-0 md:hidden">
-                          <Photo src={c.srcMobile} alt="" fill sizes="100vw" className="object-cover" />
-                        </span>
-                      )}
-                      <span className={c.srcMobile ? "hidden md:contents" : "contents"}>
-                        {/* Phone and tablet: the same visual, tiny and scaled up, as a soft fill around it */}
-                        <Image src={c.src} alt="" fill sizes="64px" quality={40} className="scale-125 object-cover blur-xl lg:hidden" />
-                        <span aria-hidden="true" className="absolute inset-0 bg-[rgb(9_34_18/0.2)] lg:hidden" />
-                        {/* The visual: whole on phone and tablet, filling the card on desktop */}
-                        <span className="nid-skeleton absolute inset-0">
-                          <Photo
-                            src={c.src}
-                            alt=""
-                            fill
-                            sizes="(min-width: 768px) 80rem, 100vw"
-                            style={{ objectPosition: c.focus }}
-                            className="object-contain lg:object-cover"
-                          />
-                        </span>
+                      <span className="nid-skeleton absolute inset-0">
+                        <Photo
+                          src={c.src}
+                          alt=""
+                          fill
+                          sizes="(min-width: 768px) 80rem, 100vw"
+                          style={{ objectPosition: c.focus }}
+                          className="object-cover"
+                        />
                       </span>
                       {/* Darkens as the card sinks under the next one */}
                       <span
@@ -180,7 +166,7 @@ export function Campagnes() {
           );
         })}
         {/* Room for the finished pile to stay a moment (sticky ignores padding) */}
-        <div aria-hidden="true" className="h-[22svh]" />
+        <div aria-hidden="true" className="h-10 lg:h-[22svh]" />
       </div>
     </section>
   );

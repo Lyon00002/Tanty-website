@@ -125,6 +125,22 @@ a:focus-visible .nid-swoosh-link {
       border-color 0.2s var(--nid-ease-out);
   }
   
+  /* Phones: the same button, smaller (text, height, width). */
+  @media (max-width: 639.98px) {
+    .nid-btn {
+      min-height: 2.75rem;
+      min-width: 0;
+      padding: 0.625rem 1.125rem;
+      font-size: 0.875rem;
+      gap: 0.375rem;
+    }
+
+    .nid-btn svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+
   .nid-btn-primary {
     background: var(--nid-green);
     color: #ffffff;
@@ -432,73 +448,68 @@ a:focus-visible > .nid-bubble {
    hanging below it. Small screens: a dotted line going down. */
 .nid-sun {
   display: block;
-  width: 1.375rem;
-  height: 1.375rem;
+  width: 1.125rem;
+  height: 1.125rem;
   border-radius: 50%;
   background: var(--nid-yellow);
   box-shadow: 0 0 0 6px rgb(254 204 0 / 0.22);
 }
 
 .nid-sun-high {
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 1.5rem;
+  height: 1.5rem;
   box-shadow:
     0 0 0 8px rgb(254 204 0 / 0.22),
     0 0 70px 34px rgb(254 204 0 / 0.22);
 }
 
 .nid-sunpath {
+  --sky: 5.5rem;
   display: grid;
-  gap: 2.25rem;
-  padding-left: 2.75rem;
-}
-
-.nid-sunpath::before {
-  content: "";
-  position: absolute;
-  left: 0.6rem;
-  top: 0.5rem;
-  bottom: 0.5rem;
-  border-left: 3px dotted var(--nid-yellow);
-  /* Drawn down with the scroll (--draw, 0 to 1, set by SunPath). */
-  clip-path: inset(0 0 calc((1 - var(--draw, 1)) * 100%) 0);
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  /* Phones: the row keeps a readable width and is swiped sideways. */
+  min-width: calc(var(--n) * 6.5rem);
 }
 
 .nid-sunpath-arc {
-  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: var(--sky);
+  overflow: visible;
 }
 
 .nid-sunpath-step {
   position: relative;
+  padding-right: 0.75rem;
+  padding-top: calc(var(--sky) * (1 - 0.92 * var(--h)) + 1.25rem);
 }
 
 .nid-sunpath-step .nid-sun {
   position: absolute;
-  left: calc(-2.75rem + 0.725rem);
-  top: 0.25rem;
-  translate: -50% 0;
+  left: 0;
+  top: calc(var(--sky) * (1 - 0.92 * var(--h)));
+  translate: -50% -50%;
+}
+
+/* The strip that holds the row on phones (SunPath): edge to edge, no scrollbar, room for the glow. */
+.nid-sunpath-scroll {
+  margin-inline: calc(var(--nid-gutter) * -1);
+  padding: 2.5rem var(--nid-gutter) 0.5rem;
+  margin-top: -2.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nid-sunpath-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 1024px) {
   .nid-sunpath {
     --sky: 9rem;
-    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
-    gap: 0;
-    padding-left: 0;
-  }
-
-  .nid-sunpath::before {
-    display: none;
-  }
-
-  .nid-sunpath-arc {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: var(--sky);
-    overflow: visible;
+    min-width: 0;
   }
 
   .nid-sunpath-step {
@@ -506,20 +517,19 @@ a:focus-visible > .nid-bubble {
     padding-top: calc(var(--sky) * (1 - 0.92 * var(--h)) + 1.75rem);
   }
 
-  .nid-sunpath-step .nid-sun {
-    left: 0;
-    top: calc(var(--sky) * (1 - 0.92 * var(--h)));
-    translate: -50% -50%;
+  .nid-sunpath-scroll {
+    margin: 0;
+    padding: 0;
+    overflow: visible;
   }
 }
 
-/* Search field: on focus, a thin green edge (1px border + 1px ring) rather
-   than the site's thick focus outline, which read too heavy around a field. */
+/* Search field: on focus, only its 1px border turns green, rather than the
+   site's thick focus outline, which read too heavy around a field. */
 .w-nid .nid-search-input:focus,
 .w-nid .nid-search-input:focus-visible {
   outline: none;
   border-color: var(--nid-green);
-  box-shadow: 0 0 0 1px var(--nid-green);
 }
 
 /* The browser's own clear button (blue, off palette) is not shown. */
@@ -530,14 +540,29 @@ a:focus-visible > .nid-bubble {
 
 /* Photos waiting to load (Photo): a soft light sweeps over the grey ground
    of their frame, then the photo fades in. Only when scripts run; the sweep
-   stops if the photo cannot load, and stays still under reduced motion. */
+   stops if the photo cannot load, and stays still under reduced motion.
+   Safety net: if the scripts never take over (blocked or failed), the photo
+   shows anyway after 3 s and the sweep stops (nid-photo-safety). */
 .nid-skeleton img {
   transition: opacity 0.5s var(--nid-ease-out);
+}
+
+@keyframes nid-photo-safety {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes nid-sweep-safety {
+  to {
+    visibility: hidden;
+  }
 }
 
 @media (scripting: enabled) {
   .nid-skeleton img[data-state="loading"] {
     opacity: 0;
+    animation: nid-photo-safety 0.5s ease 3s forwards;
   }
 
   .nid-skeleton:has(img[data-state="loading"])::after {
@@ -548,7 +573,9 @@ a:focus-visible > .nid-bubble {
     background:
       linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.65) 50%, transparent 70%) 0 0 / 220% 100% no-repeat,
       #eef2f4;
-    animation: nid-shimmer 1.4s ease-in-out infinite;
+    animation:
+      nid-shimmer 1.4s ease-in-out infinite,
+      nid-sweep-safety 0s linear 3.4s forwards;
   }
 }
 
@@ -611,30 +638,25 @@ a:focus-visible > .nid-bubble {
 
 /* Words over the film (desktop): white title, closing words and full stop in
    TANTY yellow over a white swoosh; the second button outlined in white. */
-.nid-hero-outline {
-  border: 2px solid var(--nid-green-deep);
-  color: var(--nid-green-deep);
+/* Hero words over the film (phones and desktop): yellow closing words and
+   stop, white swoosh, white outline button. */
+.nid-hero-copy .nid-accent,
+.nid-hero-copy .nid-dot {
+  color: var(--nid-yellow);
 }
 
-@media (min-width: 1024px) {
-  .nid-hero-copy .nid-accent,
-  .nid-hero-copy .nid-dot {
-    color: var(--nid-yellow);
-  }
+.nid-hero-copy .nid-swoosh {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%23ffffff'/%3E%3C/svg%3E");
+}
 
-  .nid-hero-copy .nid-swoosh {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M1 15.5C46 9 118 4.5 199 5.5C197.5 8.4 194 9.8 189 10.2C123 11.2 64 14.6 5 19.2C2.4 18.6 1 17.3 1 15.5Z' fill='%23ffffff'/%3E%3C/svg%3E");
-  }
+.nid-hero-outline {
+  border: 2px solid rgb(255 255 255 / 0.85);
+  color: #ffffff;
+}
 
-  .nid-hero-outline {
-    border-color: rgb(255 255 255 / 0.85);
-    color: #ffffff;
-  }
-
-  .nid-hero-outline:hover {
-    background: #ffffff;
-    color: var(--nid-green-deep);
-  }
+.nid-hero-outline:hover {
+  background: #ffffff;
+  color: var(--nid-green-deep);
 }
 
 /* "Nos produits" stack: each product in a plain flat card (white, hairline
@@ -649,6 +671,21 @@ a:focus-visible > .nid-bubble {
   transition:
     border-color 0.25s var(--nid-ease-out),
     background-color 0.25s var(--nid-ease-out);
+}
+
+/* A lead in a narrow column on phones (the range band beside its emblem): one step smaller. */
+@media (max-width: 639.98px) {
+  .nid-lead.nid-lead-compact {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+}
+
+/* Phones: the two-column stack, with tighter cards. */
+@media (max-width: 639.98px) {
+  .nid-product-card {
+    padding: 0.5rem 0.625rem 0.5rem 0.5rem;
+  }
 }
 
 .nid-product-card:hover,
@@ -673,30 +710,25 @@ a:focus-visible > .nid-bubble {
    the empty half-band above the first card, so that card arrives right
    under the section's text instead of half a screen lower. */
 .nid-stack {
-  --h: calc(100svh - 4rem);
-  --card: calc(100svh - 6.5rem);
+  /* Phones and tablets: the card as wide as the content and as tall (doubled from 2:1, user request), owning little scroll. */
+  --card: calc(100vw - 2 * var(--nid-gutter));
+  --h: calc(var(--card) + 5rem);
   --top: 4rem;
-  --step: 12px;
+  --step: 8px;
   margin-top: calc((var(--h) - var(--card)) / -2);
   overflow-x: clip;
 }
 
 @media (min-width: 640px) {
   .nid-stack {
-    --h: calc(100svh - 5rem);
-    --card: calc(100svh - 7.5rem);
     --top: 5rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .nid-stack {
-    --card: min(44rem, calc(100svh - 7.5rem));
+    --step: 12px;
   }
 }
 
 @media (min-width: 1024px) {
   .nid-stack {
+    --h: calc(100svh - 5rem);
     --card: min(40rem, calc(100svh - 11rem));
     --step: 24px;
   }
@@ -835,7 +867,7 @@ a:focus-visible > .nid-bubble {
    midline (--news-img-h). */
 .nid-news {
   --nid-bleed: calc(max(0px, (100vw - var(--nid-max)) / 2) + var(--nid-gutter));
-  --news-img-h: clamp(13rem, 21vw, 19rem);
+  --news-img-h: clamp(7.5rem, 21vw, 19rem);
 }
 
 .nid-news-track {
@@ -860,7 +892,8 @@ a:focus-visible > .nid-bubble {
   color: var(--nid-green);
 }
 
-.nid-card:focus-within {
+/* Keyboard focus only (Tab): a mouse click on the card shows no outline. */
+.nid-card:has(a:focus-visible) {
   outline: 3px solid var(--nid-green-deep);
   outline-offset: 4px;
 }

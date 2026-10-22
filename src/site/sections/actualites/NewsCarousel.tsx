@@ -67,26 +67,26 @@ export function NewsCarousel({ items }: { items: NewsItem[] }) {
       <ul
         ref={track}
         aria-label="Actualités TANTY"
-        className="nid-noscrollbar nid-news-track -mr-[var(--nid-bleed)] -mb-6 flex snap-x snap-mandatory gap-[1.875rem] overflow-x-auto overflow-y-hidden pb-6 pr-[var(--nid-bleed)]"
+        className="nid-noscrollbar nid-news-track -mr-[var(--nid-bleed)] -mb-6 flex snap-x snap-mandatory gap-3 overflow-x-auto sm:gap-[1.875rem] overflow-y-hidden pb-6 pr-[var(--nid-bleed)]"
       >
         {items.map((item) => (
-          <li key={item.id} data-reveal="" className="nid-news-card w-[85%] shrink-0 snap-start sm:w-[calc((100%-1.875rem)/2)]">
+          <li key={item.id} data-reveal="" className="nid-news-card w-[calc((100%-0.75rem)/2)] shrink-0 snap-start sm:w-[calc((100%-1.875rem)/2)]">
             <article>
-              <div className="nid-skeleton relative h-[var(--news-img-h)] overflow-hidden rounded-[0_80px]">
+              <div className="nid-skeleton relative h-[var(--news-img-h)] overflow-hidden rounded-[0_2.5rem] sm:rounded-[0_80px]">
                 <Photo
                   src={item.image.src}
                   alt={item.image.alt}
                   fill
-                  sizes="(min-width: 640px) 40rem, 85vw"
+                  sizes="(min-width: 640px) 40rem, 50vw"
                   className="object-cover"
                   style={{ objectPosition: item.image.position }}
                 />
               </div>
-              <div className="px-5 pt-10">
-                <time dateTime={item.date} className="block text-base text-[var(--nid-ink-soft)]">
+              <div className="px-0.5 pt-3 sm:px-5 sm:pt-10">
+                <time dateTime={item.date} className="block text-[0.75rem] text-[var(--nid-ink-soft)] sm:text-base">
                   {item.dateLabel}
                 </time>
-                <h3 className="mt-4 text-[clamp(1.25rem,1.1rem+0.45vw,1.5rem)] font-medium leading-[1.42] text-[var(--nid-ink)]">{item.title}</h3>
+                <h3 className="mt-1 text-[0.875rem] font-medium leading-snug text-[var(--nid-ink)] sm:mt-4 sm:text-[clamp(1.25rem,1.1rem+0.45vw,1.5rem)] sm:leading-[1.42]">{item.title}</h3>
               </div>
             </article>
           </li>
@@ -94,7 +94,7 @@ export function NewsCarousel({ items }: { items: NewsItem[] }) {
       </ul>
 
       {pages > 1 && (
-        <div className="mt-10 flex justify-center gap-4" role="group" aria-label="Choisir une page d'actualités">
+        <div className="mt-6 flex justify-center gap-4 sm:mt-10" role="group" aria-label="Choisir une page d'actualités">
           {Array.from({ length: pages }, (_, i) => (
             <button key={i} type="button" onClick={() => go(i)} aria-current={i === page} className="flex size-6 items-center justify-center">
               <span

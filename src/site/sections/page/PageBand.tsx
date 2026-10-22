@@ -25,7 +25,7 @@ interface PageBandProps {
  */
 export function PageBand({ id, crumbs, title, lead, photo, children, aside }: PageBandProps) {
   return (
-    <section aria-labelledby={id} className="nid-on-deep relative isolate overflow-hidden pb-24 pt-10 lg:pb-32 lg:pt-12">
+    <section aria-labelledby={id} className="nid-on-deep relative isolate overflow-hidden pb-16 pt-6 lg:pb-32 lg:pt-12">
       <Image
         src={photo.src}
         alt=""
@@ -37,23 +37,26 @@ export function PageBand({ id, crumbs, title, lead, photo, children, aside }: Pa
       />
       <div aria-hidden="true" className="nid-page-veil absolute inset-0 -z-10" />
       <BandEdge side="bottom" />
-      <div className={`nid-wrap grid items-center gap-14 ${aside ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-16" : ""}`}>
+      <div className="nid-wrap">
+        <Breadcrumbs items={crumbs} />
+      </div>
+      <div className={`nid-wrap relative mt-5 grid items-center lg:mt-14 ${aside ? "grid-cols-[minmax(0,1fr)_minmax(0,0.42fr)] gap-x-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-16" : ""}`}>
         <div>
-          <Breadcrumbs items={crumbs} />
-          <h1 data-reveal="" id={id} className="nid-title mt-10 lg:mt-14">
+          <h1 data-reveal="" id={id} className="nid-title">
             {title}
           </h1>
           {lead && (
-            <p data-reveal="" className="nid-lead mt-5">
+            <p data-reveal="" className="nid-lead nid-lead-compact mt-2 lg:mt-5">
               {lead}
             </p>
           )}
           {children && (
-            <div data-reveal="" className="mt-9">
+            <div data-reveal="" className="mt-4 lg:mt-9">
               {children}
             </div>
           )}
         </div>
+        {/* The visual: its own column on the right, at every size */}
         {aside}
       </div>
     </section>

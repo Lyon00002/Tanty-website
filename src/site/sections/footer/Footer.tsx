@@ -9,7 +9,7 @@ import { RANGE_LINKS, routes } from "../../routes";
 /** White footer. `above`: colour of the section above, shown around the curved top edge. */
 export function Footer({ above }: { above?: string }) {
   const ranges = [...listedCategories].sort((a, b) => a.order - b.order);
-  const heading = "nid-display text-xl text-[var(--nid-ink)]";
+  const heading = "nid-display text-[1.05rem] text-[var(--nid-ink)] sm:text-xl";
   // Plain footer links: nothing at rest; on hover or keyboard focus, the hero's yellow swoosh draws in.
   const link = "nid-swoosh-link font-semibold text-[var(--nid-ink-soft)] transition-colors hover:text-[var(--nid-ink)]";
   return (
@@ -19,9 +19,9 @@ export function Footer({ above }: { above?: string }) {
         <path d="M0 64V24Q720 88 1440 24V64Z" fill="#ffffff" />
       </svg>
       <div className="nid-on-white">
-        <div className="nid-wrap relative grid gap-12 pb-14 pt-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_0.9fr_1.2fr] lg:gap-10 lg:pt-14">
+        <div className="nid-wrap relative grid grid-cols-2 gap-x-5 gap-y-9 pb-10 pt-6 text-[0.875rem] sm:text-base lg:grid-cols-[1.2fr_1fr_0.9fr_1.2fr] lg:gap-10 lg:pb-14 lg:pt-14">
           <div data-reveal="">
-            <Link href={routes.home} className="block w-[180px]">
+            <Link href={routes.home} className="block w-[120px] lg:w-[180px]">
               <BrandLogo className="w-full" title="TANTY, accueil" />
             </Link>
             <p className="mt-5 max-w-xs text-[var(--nid-ink-soft)]">

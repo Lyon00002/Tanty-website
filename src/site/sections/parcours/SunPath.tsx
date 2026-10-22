@@ -21,9 +21,9 @@ const ARC = (() => {
 
 /**
  * Le chemin du soleil: TANTY's verified milestones, each one on a sun a
- * little higher in the sky than the last. Wide screens: one row, a dotted
- * arc across the suns; small screens: the suns go down a dotted line. The
- * path draws itself with the scroll and each sun rises as it reaches it
+ * little higher in the sky than the last: one row, a dotted arc across the
+ * suns (on phones the same row, swiped sideways). The path draws itself
+ * with the scroll and each sun rises as it reaches it
  * (undone when scrolling back, so it plays at every visit); the last sun
  * glows. Static under reduced motion.
  */
@@ -34,32 +34,22 @@ export function SunPath({ items }: { items: Milestone[] }) {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add({ wide: "(min-width: 1024px)", motion: MOTION_OK }, (ctx) => {
+      mm.add(MOTION_OK, () => {
         const el = root.current;
-        const { wide, motion } = ctx.conditions ?? {};
-        if (!el || !motion) return;
-        // The path follows the scroll (both ways, so at every visit): the arc across on wide
-        // screens, from the moment the path enters the screen until its top reaches 45 % of it
-        // (all of it in view); the dotted line down on small ones, its pen at 88 % of the
-        // screen's height, so each step lights up as soon as it shows.
+        if (!el) return;
+        // The arc draws itself with the scroll (both ways, so at every visit), from the moment
+        // the path enters the screen until its top reaches 45 % of it.
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: wide
-            ? { trigger: el, start: "top bottom", end: "top 45%", scrub: 0.6 }
-            : { trigger: el, start: "top 88%", end: "bottom 88%", scrub: 0.6 },
+          scrollTrigger: { trigger: el, start: "top bottom", end: "top 45%", scrub: 0.6 },
         });
-        tl.fromTo(el.querySelector("[data-arc]"), { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1 }, 0).fromTo(
-          el,
-          { "--draw": 0 },
-          { "--draw": 1, duration: 1 },
-          0,
-        );
+        tl.fromTo(el.querySelector("[data-arc]"), { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1 }, 0);
         // Each sun rises when the path reaches it, its text just after.
         const box = el.getBoundingClientRect();
         const says = el.querySelectorAll("[data-say]");
         el.querySelectorAll("[data-sun]").forEach((sun, i) => {
           const r = sun.getBoundingClientRect();
-          const along = wide ? (r.left + r.width / 2 - box.left) / box.width : (r.top + r.height / 2 - box.top) / box.height;
+          const along = (r.left + r.width / 2 - box.left) / box.width;
           const at = Math.min(0.9, Math.max(0, along));
           tl.fromTo(sun, { y: 26, scale: 0.4, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 0.07, ease: "back.out(1.7)" }, at).fromTo(
             says[i],
@@ -74,8 +64,10 @@ export function SunPath({ items }: { items: Milestone[] }) {
   );
 
   return (
+    // Phones: the same row, swiped sideways.
+    <div className="nid-sunpath-scroll">
     <ol ref={root} aria-label="Les grandes étapes de TANTY" className="nid-sunpath relative" style={{ "--n": n } as CSSProperties}>
-      {/* The arc across the sky band (wide screens) */}
+      {/* The arc across the sky band */}
       <svg
         data-arc=""
         viewBox="0 0 1000 100"
@@ -94,12 +86,13 @@ export function SunPath({ items }: { items: Milestone[] }) {
           <li key={m.year} className="nid-sunpath-step" style={{ "--h": rise(t).toFixed(3) } as CSSProperties}>
             <span data-sun="" aria-hidden="true" className={`nid-sun ${last ? "nid-sun-high" : ""}`} />
             <div data-say="">
-              <p className="nid-display nid-num text-[1.7rem] leading-none text-[var(--nid-green)]">{m.year}</p>
-              <p className="mt-2 text-[0.9375rem] leading-relaxed text-pretty text-[var(--nid-ink-soft)]">{m.text}</p>
+              <p className="nid-display nid-num text-[1.2rem] leading-none text-[var(--nid-green)] lg:text-[1.7rem]">{m.year}</p>
+              <p className="mt-1.5 text-[0.8125rem] leading-snug text-pretty text-[var(--nid-ink-soft)] lg:mt-2 lg:text-[0.9375rem] lg:leading-relaxed">{m.text}</p>
             </div>
           </li>
         );
       })}
     </ol>
+    </div>
   );
 }

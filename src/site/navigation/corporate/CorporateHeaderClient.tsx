@@ -392,16 +392,10 @@ export function CorporateHeaderClient({ data }: { data: HeaderData }) {
           </div>
           <div className="nid-wrap flex flex-1 flex-col gap-8 pb-10 pt-2">
             <SearchBox entries={data.search} onPick={() => setMenuOpen(false)} />
+            {/* Pages only, no jumps to the home page's sections (user request): contact is in the buttons below. */}
             <nav aria-label="Navigation principale">
               <ul>
-                {[
-                  { label: "Accueil", href: routes.home },
-                  { label: "Nos gammes", href: routes.ranges },
-                  { label: "Nos produits", href: routes.featured },
-                  ...SECTIONS,
-                  ...(data.storeHref ? [{ label: "Boutique", href: data.storeHref }] : []),
-                  { label: "Contact", href: routes.contact },
-                ].map((l) => (
+                {[{ label: "Accueil", href: routes.home }, ...(data.storeHref ? [{ label: "Boutique", href: data.storeHref }] : [])].map((l) => (
                   <li key={l.label}>
                     <Link href={l.href} onClick={() => setMenuOpen(false)} className="nid-display block py-2.5 text-[1.6rem] text-[var(--nid-ink)]">
                       {l.label}
@@ -409,6 +403,22 @@ export function CorporateHeaderClient({ data }: { data: HeaderData }) {
                   </li>
                 ))}
               </ul>
+              {data.ranges.some((r) => !r.href.includes("#")) && (
+                <>
+                  <p className="nid-display mt-5 text-[1.6rem] text-[var(--nid-ink)]">Nos gammes</p>
+                  <ul className="mt-2 grid grid-cols-2 gap-x-4">
+                    {data.ranges
+                      .filter((r) => !r.href.includes("#"))
+                      .map((r) => (
+                        <li key={r.id}>
+                          <Link href={r.href} onClick={() => setMenuOpen(false)} className="block py-2 font-semibold text-[var(--nid-ink-soft)]">
+                            {r.short}
+                          </Link>
+                        </li>
+                      ))}
+                  </ul>
+                </>
+              )}
             </nav>
             <RibbonDivider className="!px-0" />
             <details className="group">

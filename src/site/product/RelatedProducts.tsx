@@ -26,7 +26,7 @@ export function RelatedProducts({ product }: { product: Product }) {
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </div>
-        <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-7">
+        <ul className="mt-10 grid grid-cols-2 gap-x-3 gap-y-7 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-7">
           {siblings.map((p) => (
             <li key={p.id} data-reveal="" className="flex">
               <ProductCard product={p} />

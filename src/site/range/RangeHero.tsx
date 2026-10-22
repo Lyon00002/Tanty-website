@@ -35,17 +35,18 @@ export function RangeHero({ range }: { range: Category }) {
           <RangeEmblem
             range={range}
             packaging={products[0] ? primaryPackaging(products[0]) : undefined}
-            className="mx-auto w-full max-w-[16rem] sm:max-w-[20rem] lg:mr-[8%] lg:max-w-[22rem]"
+            sizes="(min-width: 1024px) 22rem, 6rem"
+            className="w-full lg:ml-auto lg:mr-[8%] lg:max-w-[22rem]"
           />
         </div>
       }
     >
-      <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-        <Action href={whatsappContactUrl()} variant="yellow">
-          <MessageCircle aria-hidden="true" className="size-5" />
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5 lg:gap-x-8 lg:gap-y-4">
+        <Action href={whatsappContactUrl()} variant="yellow" className="max-sm:min-h-9 max-sm:px-3 max-sm:py-2 max-sm:text-[0.75rem]">
+          <MessageCircle aria-hidden="true" className="size-4 sm:size-5" />
           Commander sur WhatsApp
         </Action>
-        <a href="#produits" className="nid-link nid-num text-white">
+        <a href="#produits" className="nid-link nid-num text-[0.75rem] text-white sm:text-base">
           Voir {count > 1 ? `les ${count} produits` : "le produit"}
         </a>
       </div>

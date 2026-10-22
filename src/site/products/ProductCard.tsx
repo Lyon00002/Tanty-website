@@ -17,8 +17,8 @@ export function ProductCard({ product, showRange }: { product: Product; showRang
   return (
     <article className="nid-card group relative flex w-full flex-col">
       <ProductImage product={product} />
-      <div className="flex flex-1 flex-col pt-4">
-        <h3 className="text-lg font-semibold leading-snug text-[var(--nid-ink)]">
+      <div className="flex flex-1 flex-col pt-2 sm:pt-4">
+        <h3 className="text-[0.8125rem] font-semibold leading-tight text-[var(--nid-ink)] sm:text-lg sm:leading-snug">
           {STORE_LINKS ? (
             <Link href={routes.product(product)} className="after:absolute after:inset-0">
               {product.name}
@@ -27,10 +27,10 @@ export function ProductCard({ product, showRange }: { product: Product; showRang
             product.name
           )}
         </h3>
-        {showRange && <p className="mt-1 text-sm font-semibold text-[var(--nid-green)]">{getCategory(product.category).short}</p>}
-        <p className="nid-num mt-1 text-sm leading-snug text-[var(--nid-ink-soft)]">{formatList(product)}</p>
+        {showRange && <p className="mt-0.5 text-[0.6875rem] font-semibold text-[var(--nid-green)] sm:mt-1 sm:text-sm">{getCategory(product.category).short}</p>}
+        <p className="nid-num mt-1 hidden text-sm leading-snug text-[var(--nid-ink-soft)] sm:block">{formatList(product)}</p>
         {STORE_LINKS && (
-          <p className="mt-auto flex items-center gap-1.5 pt-3 text-sm font-bold text-[var(--nid-green)]" aria-hidden="true">
+          <p className="mt-auto hidden items-center gap-1.5 pt-3 text-sm font-bold text-[var(--nid-green)] sm:flex" aria-hidden="true">
             Voir la fiche
             <ArrowRight className="size-4 transition-transform duration-300 ease-[var(--nid-ease-out)] group-hover:translate-x-1" />
           </p>

@@ -24,7 +24,7 @@ export function ProductStage({ photos, packaging, name }: { photos: StagePhoto[]
   return (
     <div className="mx-auto w-full max-w-[30rem] lg:mx-0">
       <div data-reveal="clip">
-        <div className="nid-skeleton relative aspect-[4/5] overflow-hidden rounded-[0_48px] bg-[#eef2f4]">
+        <div className="nid-skeleton relative aspect-[4/5] overflow-hidden rounded-[0_1.5rem] bg-[#eef2f4] sm:rounded-[0_48px]">
           {current ? (
             <Photo
               key={current.src}
@@ -38,7 +38,7 @@ export function ProductStage({ photos, packaging, name }: { photos: StagePhoto[]
           ) : (
             <span className="absolute inset-0 flex flex-col items-center justify-center gap-4">
               <PackagingIcon kind={packaging} strokeWidth={2} className="h-auto w-[34%] max-w-36" />
-              <span className="text-[var(--nid-ink-soft)]">
+              <span className="text-[0.75rem] text-[var(--nid-ink-soft)] sm:text-base">
                 Photo à venir<span className="sr-only">, emballage : {PACKAGING_LABEL[packaging]}</span>
               </span>
             </span>
@@ -47,14 +47,14 @@ export function ProductStage({ photos, packaging, name }: { photos: StagePhoto[]
       </div>
 
       {photos.length > 1 && (
-        <div className="mt-6 flex justify-center gap-3" role="group" aria-label={`Photos de ${name}`}>
+        <div className="mt-2.5 flex justify-center gap-1.5 sm:mt-6 sm:gap-3" role="group" aria-label={`Photos de ${name}`}>
           {photos.map((photo, i) => (
             <button
               key={photo.src}
               type="button"
               onClick={() => setActive(i)}
               aria-pressed={i === active}
-              className={`nid-skeleton relative h-20 w-16 overflow-hidden rounded-[0_0.875rem] border-2 transition-colors duration-200 ${
+              className={`nid-skeleton relative h-11 w-9 overflow-hidden rounded-[0_0.5rem] border-2 sm:h-20 sm:w-16 sm:rounded-[0_0.875rem] transition-colors duration-200 ${
                 i === active ? "border-[var(--nid-yellow)]" : "border-transparent hover:border-[var(--nid-ink)]/25"
               }`}
             >

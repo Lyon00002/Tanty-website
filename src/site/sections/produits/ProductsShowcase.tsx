@@ -152,13 +152,13 @@ export function ProductsShowcase({
           </div>
         )}
 
-        <ul className="mt-8 grid content-start gap-3 sm:grid-cols-2 lg:gap-4" aria-label="Nos produits">
+        <ul className="mt-6 grid content-start grid-cols-2 gap-2 sm:mt-8 sm:gap-3 lg:gap-4" aria-label="Nos produits">
           {items.map((item, i) => {
             const on = i === active;
             // A small portrait of the studio photo (background kept); the packaging outline only when there is no photo.
             const thumb = (
               <span
-                className="nid-skeleton relative flex h-[88px] w-[70px] shrink-0 items-center justify-center overflow-hidden rounded-[2px] xl:h-[96px] xl:w-[76px]"
+                className="nid-skeleton relative flex h-[56px] w-[42px] shrink-0 items-center justify-center overflow-hidden rounded-[2px] sm:h-[88px] sm:w-[70px] xl:h-[96px] xl:w-[76px]"
               >
                 {item.photos[0] ? (
                   <Photo src={item.photos[0].src} alt="" fill sizes="80px" className="object-cover" />
@@ -170,15 +170,15 @@ export function ProductsShowcase({
             // What a buyer needs at a glance: the range, the name, the formats on sale.
             const label = (
               <span className="min-w-0">
-                {item.range && <span className="block text-xs font-semibold uppercase tracking-[0.06em] text-[var(--nid-green)]">{item.range}</span>}
+                {item.range && <span className="block whitespace-nowrap text-[0.625rem] font-semibold uppercase tracking-[0.05em] text-[var(--nid-green)] sm:text-xs sm:tracking-[0.06em]">{item.range}</span>}
                 <span
-                  className={`mt-0.5 block text-lg font-semibold leading-snug transition-colors duration-200 ${
+                  className={`mt-0.5 block text-[0.9375rem] font-semibold leading-tight transition-colors duration-200 sm:text-lg sm:leading-snug ${
                     on ? "lg:text-[var(--nid-green)]" : "text-[var(--nid-ink)] group-hover:text-[var(--nid-green)]"
                   }`}
                 >
                   {item.name}
                 </span>
-                <span className="nid-num mt-1 block text-sm leading-snug text-[var(--nid-ink-soft)]">{item.formats}</span>
+                <span className="nid-num mt-1 hidden text-sm leading-snug text-[var(--nid-ink-soft)] sm:block">{item.formats}</span>
               </span>
             );
             const preview = {
@@ -192,7 +192,7 @@ export function ProductsShowcase({
             return (
               <li key={item.id} data-reveal="">
                 {item.href ? (
-                  <Link href={item.href} {...preview} data-on={on} className="nid-product-card group flex w-full items-center gap-4 text-left">
+                  <Link href={item.href} {...preview} data-on={on} className="nid-product-card group flex h-full w-full items-center gap-3 text-left sm:gap-4">
                     {thumb}
                     {label}
                   </Link>

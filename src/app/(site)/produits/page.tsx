@@ -47,14 +47,14 @@ export default function CataloguePage() {
         >
           {RANGE_LINKS && (
             <>
-              <p className="font-semibold text-white">Voir une gamme&nbsp;:</p>
+              <p className="text-[0.875rem] font-semibold text-white sm:text-base">Voir une gamme&nbsp;:</p>
               <nav aria-label="Nos gammes" className="mt-3">
                 <ul className="flex flex-wrap gap-2">
                   {ranges.map((r) => (
                     <li key={r.id}>
                       <Link
                         href={routes.range(r)}
-                        className="inline-flex min-h-10 items-center rounded-[4px] border border-white px-3 py-2 text-sm text-white transition-colors duration-200 hover:border-[var(--nid-yellow)] hover:bg-[var(--nid-yellow)] hover:text-[var(--nid-green-deep)]"
+                        className="inline-flex min-h-9 items-center rounded-[4px] border border-white px-2.5 py-1.5 text-[0.8125rem] text-white sm:min-h-10 sm:px-3 sm:py-2 sm:text-sm transition-colors duration-200 hover:border-[var(--nid-yellow)] hover:bg-[var(--nid-yellow)] hover:text-[var(--nid-green-deep)]"
                       >
                         {r.short}
                       </Link>
@@ -67,7 +67,7 @@ export default function CataloguePage() {
         </PageBand>
 
         <section aria-label="Tous les produits" className="nid-on-white pb-20 pt-14 lg:pb-28 lg:pt-20">
-          <ul className="nid-wrap grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
+          <ul className="nid-wrap grid grid-cols-3 gap-x-2.5 gap-y-5 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
             {products.map((p) => (
               <li key={p.id} data-reveal="" className="flex">
                 <ProductCard product={p} showRange />

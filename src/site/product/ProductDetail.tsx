@@ -30,8 +30,9 @@ export function ProductDetail({ product }: { product: Product }) {
             { label: product.name },
           ]}
         />
-        <div className="mt-10 grid items-start gap-12 lg:mt-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-20">
-          <div className="lg:sticky lg:top-24">
+        {/* Phones: photo and name side by side, the details below; desktop: photo left (held), all the rest right */}
+        <div className="mt-5 grid grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] items-start gap-x-4 gap-y-6 lg:mt-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-20 lg:gap-y-0">
+          <div className="lg:sticky lg:top-24 lg:row-span-2">
             <ProductStage photos={getProductPhotos(product)} packaging={primaryPackaging(product)} name={product.name} />
           </div>
 
@@ -40,15 +41,17 @@ export function ProductDetail({ product }: { product: Product }) {
               {product.name}
             </h1>
             {product.description && (
-              <p data-reveal="" className="nid-lead mt-5">
+              <p data-reveal="" className="nid-lead mt-2.5 lg:mt-5">
                 {product.description}
               </p>
             )}
+          </div>
 
+          <div className="col-span-2 lg:col-span-1 lg:col-start-2">
             {/* The range first (its page, or its place in the catalogue), then the verified facts. */}
-            <dl data-reveal="" className="mt-9 grid gap-x-10 gap-y-5 border-t border-[var(--nid-ink)]/10 pt-6 sm:grid-cols-2">
+            <dl data-reveal="" className="grid grid-cols-2 gap-x-5 gap-y-4 border-t border-[var(--nid-ink)]/10 pt-5 text-[0.875rem] sm:gap-x-10 sm:gap-y-5 sm:pt-6 sm:text-base lg:mt-9">
               <div>
-                <dt className="text-sm text-[var(--nid-ink-soft)]">Gamme</dt>
+                <dt className="text-[0.8125rem] text-[var(--nid-ink-soft)] sm:text-sm">Gamme</dt>
                 <dd className="mt-1 font-semibold leading-snug">
                   <Link href={rangeHref} className="nid-link text-[var(--nid-green-deep)]">
                     {product.line}
@@ -57,16 +60,16 @@ export function ProductDetail({ product }: { product: Product }) {
               </div>
               {product.facts?.map((f) => (
                 <div key={f.label}>
-                  <dt className="text-sm text-[var(--nid-ink-soft)]">{f.label}</dt>
+                  <dt className="text-[0.8125rem] text-[var(--nid-ink-soft)] sm:text-sm">{f.label}</dt>
                   <dd className="mt-1 font-semibold leading-snug">{f.value}</dd>
                 </div>
               ))}
             </dl>
 
-            <div data-reveal="" className="mt-10">
+            <div data-reveal="" className="mt-7 sm:mt-10">
               <FormatOrder product={product} />
             </div>
-            <p data-reveal="" className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-1 text-[var(--nid-ink-soft)]">
+            <p data-reveal="" className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.875rem] text-[var(--nid-ink-soft)] sm:mt-8 sm:text-base">
               <Phone aria-hidden="true" className="size-4 text-[var(--nid-green)]" />
               Service client&nbsp;:
               <a href={`tel:${company.phone.e164}`} className="nid-link nid-num text-[var(--nid-ink)]">
