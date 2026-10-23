@@ -452,7 +452,7 @@ a:focus-visible > .nid-bubble {
    Wide screens: one column per milestone, no gaps (each sun sits on its
    column's left edge, where the arc passes); the sky band is --sky tall and
    each sun stands at its height --h (0 = horizon, 1 = highest), its text
-   hanging below it. Small screens: a dotted line going down. */
+   hanging below it. Small screens: the same path folded like a ribbon. */
 .nid-sun {
   display: block;
   width: 1.125rem;
@@ -470,59 +470,56 @@ a:focus-visible > .nid-bubble {
     0 0 70px 34px rgb(254 204 0 / 0.22);
 }
 
-/* The path of the sun: wide screens only (phones get the tear-off calendar). */
+/* The path of the sun: wide screens only (phones get it folded, below). */
 .nid-sunpath {
   display: none;
 }
 
-/* The tear-off calendar (SunCalendar, phones): white leaves under a yellow
-   binding with two rings; two leaves of the pile show underneath, askew like
-   the photographs pinned above. */
-.nid-leaves::before,
-.nid-leaves::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgb(17 36 26 / 0.1);
-  border-radius: 0 1.5rem;
-  background: #ffffff;
-  pointer-events: none;
+/* The path folded like a ribbon (SunTrail, phones and tablets): rows of two,
+   then three, each row read the other way from the last (placement in --r2
+   --c2 / --r3 --c3, set per step). The suns grow along the path (--s). */
+.nid-trail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1rem;
+  row-gap: 1.375rem;
 }
 
-.nid-leaves::before {
-  translate: 6px 9px;
-  rotate: 2.2deg;
-  background: var(--nid-placeholder);
+.nid-trail-step {
+  grid-row: var(--r2);
+  grid-column: var(--c2);
 }
 
-.nid-leaves::after {
-  translate: 3px 4px;
-  rotate: 1deg;
+.nid-trail .nid-sun {
+  width: var(--s);
+  height: var(--s);
+  box-shadow: 0 0 0 4px rgb(254 204 0 / 0.22);
 }
 
-.nid-leaf {
-  overflow: hidden;
-  border: 1px solid rgb(17 36 26 / 0.12);
-  border-radius: 0 1.5rem;
-  background: #ffffff;
-  box-shadow: 0 18px 30px -24px rgb(17 36 26 / 0.45);
+.nid-trail .nid-sun-high {
+  box-shadow:
+    0 0 0 6px rgb(254 204 0 / 0.25),
+    0 0 40px 18px rgb(254 204 0 / 0.22);
 }
 
-.nid-leaf-binding {
-  display: flex;
-  justify-content: center;
-  gap: 4.5rem;
-  height: 1.75rem;
-  align-items: center;
-  background: var(--nid-yellow);
+@media (min-width: 640px) {
+  .nid-trail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 1.75rem;
+    row-gap: 1.75rem;
+  }
+
+  .nid-trail-step {
+    grid-row: var(--r3);
+    grid-column: var(--c3);
+  }
 }
 
-.nid-leaf-binding span {
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 2px var(--nid-green-deep);
+/* Wide screens have the arc (this rule is unlayered, so lg:hidden alone would lose). */
+@media (min-width: 1024px) {
+  .nid-trail {
+    display: none;
+  }
 }
 
 @media (min-width: 1024px) {

@@ -3,7 +3,7 @@
 import { useRef, type CSSProperties } from "react";
 import { gsap, MOTION_OK, useGSAP } from "../../motion/gsap";
 import type { Milestone } from "../histoire/milestones";
-import { SunCalendar } from "./SunCalendar";
+import { SunTrail } from "./SunTrail";
 
 /*
  * The path of the sun (after the "Matin" proposal): a dotted arc that climbs
@@ -26,7 +26,8 @@ const ARC = (() => {
  * suns, each year and its text under its sun. The arc draws itself with the
  * scroll and each sun rises as the path reaches it (undone when scrolling
  * back, so it plays at every visit); the last sun glows. Wide screens only:
- * phones get the tear-off calendar (SunCalendar). Static under reduced motion.
+ * phones and tablets get the same path folded like a ribbon (SunTrail).
+ * Static under reduced motion.
  */
 export function SunPath({ items }: { items: Milestone[] }) {
   const root = useRef<HTMLOListElement>(null);
@@ -93,7 +94,7 @@ export function SunPath({ items }: { items: Milestone[] }) {
           );
         })}
       </ol>
-      <SunCalendar items={items} />
+      <SunTrail items={items} />
     </>
   );
 }

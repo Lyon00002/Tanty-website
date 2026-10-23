@@ -44,7 +44,7 @@ export function FormatOrder({ product }: { product: Product }) {
       {/* The price of the chosen format (its tag above already says which one) */}
       {price !== undefined && (
         <p className="mt-6 sm:mt-7">
-          <Price amount={price} className="text-[2.5rem] sm:text-[3.5rem]" />
+          <Price amount={price} className="text-[3.5rem] sm:text-[4.75rem]" />
         </p>
       )}
       <Action href={whatsappOrderUrl(product, format)} className={price !== undefined ? "mt-4 sm:mt-5" : "mt-6 sm:mt-8"}>
