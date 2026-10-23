@@ -11,7 +11,8 @@ export function Price({ amount, className }: { amount: number; className?: strin
   return (
     <span className={`nid-display nid-price nid-swoosh nid-num inline-flex items-baseline whitespace-nowrap leading-none text-[var(--nid-green)] ${className ?? ""}`}>
       {figure}
-      <span className="ml-[0.25em] text-[0.55em]">FCFA</span>
+      {/* Never under 9 px, where a small price (a card on a phone) would leave it unreadable */}
+      <span className="ml-[0.25em] text-[max(0.55em,0.5625rem)]">FCFA</span>
     </span>
   );
 }

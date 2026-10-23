@@ -177,7 +177,7 @@ export function ProductsShowcase({
               <span className="min-w-0">
                 {item.range && <span className="block whitespace-nowrap text-[0.625rem] font-semibold uppercase tracking-[0.05em] text-[var(--nid-green)] sm:text-xs sm:tracking-[0.06em]">{item.range}</span>}
                 <span
-                  className={`mt-0.5 block text-[0.9375rem] font-semibold leading-tight transition-colors duration-200 sm:text-lg sm:leading-snug ${
+                  className={`mt-0.5 block text-[0.8125rem] font-semibold leading-tight transition-colors duration-200 sm:text-base sm:leading-snug ${
                     on ? "lg:text-[var(--nid-green)]" : "text-[var(--nid-ink)] group-hover:text-[var(--nid-green)]"
                   }`}
                 >
@@ -186,8 +186,8 @@ export function ProductsShowcase({
                 <span className="nid-num mt-1 hidden text-sm leading-snug text-[var(--nid-ink-soft)] sm:block">{item.formats}</span>
                 {item.price !== undefined && (
                   <span className="mt-1 block">
-                    {/* As large to the eye as the name (0.9375rem, then 1.125rem): the narrow figures take a fifth more */}
-                    <Price amount={item.price} className="text-[1.125rem] sm:text-[1.375rem]" />
+                    {/* Larger than the name (0.8125rem, then 1rem), on phones as on desktop (user choice) */}
+                    <Price amount={item.price} className="text-[1.375rem] sm:text-[1.625rem]" />
                   </span>
                 )}
               </span>
