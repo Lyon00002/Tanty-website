@@ -5,6 +5,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import type { PackagingKind } from "@/data/products";
 import { PackagingIcon } from "../../icons/PackagingIcon";
+import { Price } from "../../products/PriceTag";
 import { Photo } from "../../ui/Photo";
 
 export interface ShowcasePhoto {
@@ -19,8 +20,8 @@ export interface ShowcaseItem {
   /** Range short name, shown only when it differs from the product name. */
   range?: string;
   formats: string;
-  /** "dès 100 FCFA": the price at a glance, when known. */
-  price?: string;
+  /** The price at a glance (the lowest format), when known. */
+  price?: number;
   packaging: PackagingKind;
   orderUrl: string;
   /** Product sheet in the store; undefined while the store is closed. */
@@ -183,7 +184,11 @@ export function ProductsShowcase({
                   {item.name}
                 </span>
                 <span className="nid-num mt-1 hidden text-sm leading-snug text-[var(--nid-ink-soft)] sm:block">{item.formats}</span>
-                {item.price && <span className="nid-num mt-0.5 block text-[0.75rem] font-semibold text-[var(--nid-ink)] sm:mt-1 sm:text-sm">{item.price}</span>}
+                {item.price !== undefined && (
+                  <span className="mt-1 block">
+                    <Price amount={item.price} className="text-[1rem] sm:text-[1.25rem]" />
+                  </span>
+                )}
               </span>
             );
             const preview = {

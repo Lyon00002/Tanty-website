@@ -4,7 +4,8 @@ import { getProductsByCategory } from "@/data/products";
 import { ProductCard } from "../products/ProductCard";
 import { ProductImage } from "../products/ProductImage";
 import { formatList } from "../products/formats";
-import { priceLabel } from "../products/price";
+import { Price } from "../products/PriceTag";
+import { priceOf } from "../products/price";
 import { routes } from "../routes";
 import { Action } from "../ui/Action";
 
@@ -34,7 +35,11 @@ export function RangeProducts({ range }: { range: Category }) {
               <h3 className="nid-display text-[clamp(1.75rem,1.35rem+1.3vw,2.4rem)] text-[var(--nid-ink)]">{single.name}</h3>
               {single.description && <p className="nid-lead mt-4">{single.description}</p>}
               <p className="nid-num mt-4 text-[var(--nid-ink-soft)]">{formatList(single)}</p>
-              {priceLabel(single) && <p className="nid-num mt-2 text-lg font-semibold text-[var(--nid-ink)]">{priceLabel(single)}</p>}
+              {priceOf(single) !== undefined && (
+                <p className="mt-4">
+                  <Price amount={priceOf(single)!} className="text-[2rem] sm:text-[2.5rem]" />
+                </p>
+              )}
               <Action href={routes.product(single)} className="mt-8">
                 Voir la fiche
                 <ArrowRight aria-hidden="true" className="size-5" />

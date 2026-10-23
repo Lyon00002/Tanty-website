@@ -4,7 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { useId, useState } from "react";
 import type { Product } from "@/data/products";
 import { whatsappOrderUrl } from "@/lib/whatsapp";
-import { formatPrice } from "../products/price";
+import { Price } from "../products/PriceTag";
 import { Action } from "../ui/Action";
 
 /**
@@ -41,10 +41,10 @@ export function FormatOrder({ product }: { product: Product }) {
           })}
         </div>
       </fieldset>
+      {/* The price of the chosen format (its tag above already says which one) */}
       {price !== undefined && (
-        <p className="mt-5 flex items-baseline gap-2 sm:mt-6">
-          <span className="nid-display nid-num text-[1.75rem] leading-none text-[var(--nid-green-deep)] sm:text-[2.25rem]">{formatPrice(price)}</span>
-          <span className="text-[0.75rem] text-[var(--nid-ink-soft)] sm:text-sm">{format}</span>
+        <p className="mt-6 sm:mt-7">
+          <Price amount={price} className="text-[2.5rem] sm:text-[3.5rem]" />
         </p>
       )}
       <Action href={whatsappOrderUrl(product, format)} className={price !== undefined ? "mt-4 sm:mt-5" : "mt-6 sm:mt-8"}>

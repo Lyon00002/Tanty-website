@@ -199,6 +199,13 @@ a:focus-visible .nid-swoosh-link {
   box-decoration-break: clone;
 }
 
+/* Prices (PriceTag): extra bold, the swoosh a little under the figures. */
+.nid-price {
+  font-weight: 800;
+  padding-bottom: 0.18em;
+  background-size: 100% 0.42em;
+}
+
 /* Dark band ("Explorez nos gammes"): white lead, closing words and full stop in TANTY yellow. */
 .nid-on-deep .nid-title {
   color: #ffffff;
@@ -463,61 +470,59 @@ a:focus-visible > .nid-bubble {
     0 0 70px 34px rgb(254 204 0 / 0.22);
 }
 
+/* The path of the sun: wide screens only (phones get the tear-off calendar). */
 .nid-sunpath {
-  --sky: 4.5rem;
-  display: grid;
-  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  display: none;
 }
 
-.nid-sunpath-arc {
+/* The tear-off calendar (SunCalendar, phones): white leaves under a yellow
+   binding with two rings; two leaves of the pile show underneath, askew like
+   the photographs pinned above. */
+.nid-leaves::before,
+.nid-leaves::after {
+  content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: var(--sky);
-  overflow: visible;
+  inset: 0;
+  border: 1px solid rgb(17 36 26 / 0.1);
+  border-radius: 0 1.5rem;
+  background: #ffffff;
+  pointer-events: none;
 }
 
-.nid-sunpath-step {
-  position: relative;
-  padding-top: calc(var(--sky) * (1 - 0.92 * var(--h)) + 1rem);
+.nid-leaves::before {
+  translate: 6px 9px;
+  rotate: 2.2deg;
+  background: var(--nid-placeholder);
 }
 
-.nid-sunpath-step .nid-sun {
-  position: absolute;
-  left: 0;
-  top: calc(var(--sky) * (1 - 0.92 * var(--h)));
-  translate: -50% -50%;
-  transition:
-    scale 0.45s var(--nid-ease-out),
-    box-shadow 0.45s var(--nid-ease-out);
+.nid-leaves::after {
+  translate: 3px 4px;
+  rotate: 1deg;
 }
 
-/* Phones: the whole arc in miniature, the year centred under its sun; the sun of
-   the step told in the caption (SunPath) swells and shines. */
-.nid-sunpath-year {
-  font-size: 0.8125rem;
-  color: var(--nid-ink-soft);
-  transition: color 0.3s var(--nid-ease-out);
+.nid-leaf {
+  overflow: hidden;
+  border: 1px solid rgb(17 36 26 / 0.12);
+  border-radius: 0 1.5rem;
+  background: #ffffff;
+  box-shadow: 0 18px 30px -24px rgb(17 36 26 / 0.45);
 }
 
-@media (max-width: 1023.98px) {
-  .nid-sunpath-step [data-say] {
-    translate: -50% 0;
-    width: max-content;
-  }
+.nid-leaf-binding {
+  display: flex;
+  justify-content: center;
+  gap: 4.5rem;
+  height: 1.75rem;
+  align-items: center;
+  background: var(--nid-yellow);
+}
 
-  .nid-sunpath-step[data-active="true"] .nid-sun {
-    scale: 1.45;
-    box-shadow:
-      0 0 0 6px rgb(254 204 0 / 0.28),
-      0 0 34px 12px rgb(254 204 0 / 0.3);
-  }
-
-  .nid-sunpath-step[data-active="true"] .nid-sunpath-year {
-    color: var(--nid-green-deep);
-    font-weight: 800;
-  }
+.nid-leaf-binding span {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px var(--nid-green-deep);
 }
 
 @media (min-width: 1024px) {
@@ -525,11 +530,28 @@ a:focus-visible > .nid-bubble {
      (a fixed 9rem flattened it as the row widened). */
   .nid-sunpath {
     --sky: clamp(9rem, 10.5vw, 17rem);
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
   }
 
-  .nid-sunpath-year {
-    font-size: 1.7rem;
-    color: var(--nid-green);
+  .nid-sunpath-arc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: var(--sky);
+    overflow: visible;
+  }
+
+  .nid-sunpath-step {
+    position: relative;
+  }
+
+  .nid-sunpath-step .nid-sun {
+    position: absolute;
+    left: 0;
+    top: calc(var(--sky) * (1 - 0.92 * var(--h)));
+    translate: -50% -50%;
   }
 
   /* Desktop: the suns at their full size (they are smaller only on phones). */

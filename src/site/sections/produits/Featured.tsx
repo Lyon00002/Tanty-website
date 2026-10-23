@@ -3,7 +3,7 @@ import { primaryPackaging, publishedProducts } from "@/data/products";
 import { getProductPhotos } from "@/lib/product-media";
 import { whatsappOrderUrl } from "@/lib/whatsapp";
 import { formatList } from "../../products/formats";
-import { priceLabel } from "../../products/price";
+import { priceOf } from "../../products/price";
 import { STORE_LINKS, routes } from "../../routes";
 import { ProductsShowcase, type ShowcaseItem } from "./ProductsShowcase";
 
@@ -47,7 +47,7 @@ export function Featured() {
         name: p.name,
         range: range !== p.name ? range : undefined,
         formats: formatList(p),
-        price: priceLabel(p),
+        price: priceOf(p),
         packaging: primaryPackaging(p),
         orderUrl: whatsappOrderUrl(p),
         href: STORE_LINKS ? routes.product(p) : undefined,
