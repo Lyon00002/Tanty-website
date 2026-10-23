@@ -834,23 +834,17 @@ a:focus-visible > .nid-bubble {
 }
 
 /* À l'affiche on phones and tablets (CampaignPan): the visuals whole, in a
-   row (each card 86 % of the content width, so the next one peeks in). By
-   default the row is swiped by hand. With scripts and motion welcome, the
-   scroll slides it from the moment it comes into the screen, and the title
-   and row end held under the header (sticky; 80 px on phones, 88 on tablets,
-   the title's top padding slipping under it) while the last card arrives.
-   The hold is short (the run below, under a fifth of the screen): a hold as
-   long as the slide left a void under the short row that hid the next
-   section; this way its title stays in view below (user feedback). */
+   row the visitor scrolls sideways, one card at a time. Each card as large as
+   the screen allows (its height follows its width, in the visual's
+   proportions): the whole width but for the left gutter and a sliver of the
+   next card. Not held, not moved by the page's scroll (user request). */
 .nid-pan {
-  --top: 5rem;
-  --pan-w: calc((100vw - 2 * var(--nid-gutter)) * 0.86);
+  --pan-w: calc(100vw - var(--nid-gutter) - 1.5rem);
   --pan-gap: 0.75rem;
 }
 
 @media (min-width: 640px) {
   .nid-pan {
-    --top: 5.5rem;
     --pan-gap: 1rem;
   }
 }
@@ -862,36 +856,11 @@ a:focus-visible > .nid-bubble {
 
 .nid-pan-view {
   overflow-x: auto;
+  overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--nid-gutter);
-  /* Room for the cards' shadow inside the clipped row. */
+  /* Room for the cards' shadow inside the scrolling row. */
   padding: 0.5rem var(--nid-gutter) 1.25rem;
-}
-
-.nid-pan-marks {
-  display: none;
-}
-
-@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (max-width: 1023.98px) {
-  .nid-pan-frame {
-    position: sticky;
-    top: calc(var(--top) - 3.5rem);
-  }
-
-  /* Sticky stays inside its parent's content box: the run is a block, not padding. */
-  .nid-pan-run {
-    height: clamp(6.25rem, 18svh, 12.5rem);
-  }
-
-  /* The row is moved by the scroll, not swiped (clip: no scrolling box a focused card could shift). */
-  .nid-pan-view {
-    overflow-x: clip;
-    scroll-snap-type: none;
-  }
-
-  .nid-pan-marks {
-    display: flex;
-  }
 }
 
 /* Invisible marker at card k's place in the flow: its view timeline follows
