@@ -1,3 +1,4 @@
+import { blurFor } from "@/lib/blur";
 import { MILESTONES } from "../histoire/milestones";
 import { SunPath } from "./SunPath";
 import { Photo } from "../../ui/Photo";
@@ -63,6 +64,7 @@ export function Parcours() {
                   <div className="nid-skeleton relative">
                   <Photo
                     src={p.src}
+                    blur={blurFor(p.src)}
                     width={p.width}
                     height={p.height}
                     alt={p.alt}

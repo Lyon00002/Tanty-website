@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Product } from "@/data/products";
+import { blurFor } from "./blur";
 
 /**
  * Official product photos, discovered on disk at build time.
@@ -18,6 +19,8 @@ import type { Product } from "@/data/products";
 export interface ProductPhoto {
   src: string;
   alt: string;
+  /** Blurred placeholder, shown while the photo loads. */
+  blur?: string;
 }
 
 const ROOT = path.join(process.cwd(), "public", "products");
@@ -34,12 +37,12 @@ function readPhotoFiles(slug: string): string[] {
 }
 
 export function getProductPhotos(product: Product): ProductPhoto[] {
-  const fromDisk = readPhotoFiles(product.slug).map((file, i) => ({
-    src: `/products/${product.slug}/${file}`,
-    alt: i === 0 ? `${product.name}, ${product.line}` : `${product.name}, vue ${i + 1}`,
-  }));
+  const fromDisk = readPhotoFiles(product.slug).map((file, i) => {
+    const src = `/products/${product.slug}/${file}`;
+    return { src, alt: i === 0 ? `${product.name}, ${product.line}` : `${product.name}, vue ${i + 1}`, blur: blurFor(src) };
+  });
   if (product.image) {
-    return [{ src: product.image.src, alt: product.image.alt }, ...fromDisk.slice(1)];
+    return [{ src: product.image.src, alt: product.image.alt, blur: blurFor(product.image.src) }, ...fromDisk.slice(1)];
   }
   return fromDisk;
 }

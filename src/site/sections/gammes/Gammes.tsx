@@ -2,6 +2,7 @@ import Image from "next/image";
 import { BandEdge } from "../../borders/BandEdge";
 import { listedCategories, universes } from "@/data/categories";
 import { getProductsByCategory, primaryPackaging } from "@/data/products";
+import { blurFor } from "@/lib/blur";
 import { RANGE_LINKS, routes } from "../../routes";
 import { RangePortfolio, type PortfolioGroup, type PortfolioTile } from "./RangePortfolio";
 
@@ -37,6 +38,8 @@ export function Gammes() {
       <Image
         src="/brand/photos/stock-seaux-reine.jpg"
         alt=""
+        placeholder="blur"
+        blurDataURL={blurFor("/brand/photos/stock-seaux-reine.jpg")}
         fill
         sizes="100vw"
         className="-z-20 object-cover object-[50%_40%] grayscale"

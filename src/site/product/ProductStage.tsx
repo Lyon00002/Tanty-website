@@ -8,6 +8,7 @@ import { Photo } from "../ui/Photo";
 export interface StagePhoto {
   src: string;
   alt: string;
+  blur?: string;
 }
 
 /**
@@ -29,6 +30,7 @@ export function ProductStage({ photos, packaging, name }: { photos: StagePhoto[]
             <Photo
               key={current.src}
               src={current.src}
+              blur={current.blur}
               alt={current.alt}
               fill
               preload={active === 0}
@@ -58,7 +60,7 @@ export function ProductStage({ photos, packaging, name }: { photos: StagePhoto[]
                 i === active ? "border-[var(--nid-yellow)]" : "border-transparent hover:border-[var(--nid-ink)]/25"
               }`}
             >
-              <Photo src={photo.src} alt="" fill sizes="64px" className="object-cover" />
+              <Photo src={photo.src} blur={photo.blur} alt="" fill sizes="64px" className="object-cover" />
               <span className="sr-only">
                 Photo {i + 1} sur {photos.length}
               </span>

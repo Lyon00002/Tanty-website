@@ -1,3 +1,4 @@
+import { networkInterfaces } from "node:os";
 import type { NextConfig } from "next";
 import { HOME_ONLY, RANGES_OPEN, STORE_OPEN } from "./src/site/config";
 
@@ -5,8 +6,12 @@ import { HOME_ONLY, RANGES_OPEN, STORE_OPEN } from "./src/site/config";
 const CLOSED_PAGES = [...(STORE_OPEN ? [] : ["/produits", "/produits/:slug"]), ...(RANGES_OPEN ? [] : ["/gammes/:slug"])];
 
 const nextConfig: NextConfig = {
-  // Development only: lets a phone on the same Wi-Fi open the dev server by the Mac's address.
-  allowedDevOrigins: ["192.168.10.93"],
+  // Development only: lets a phone on the same Wi-Fi open the dev server by the Mac's address,
+  // whichever network the Mac is on (its local IPv4 addresses, read when the server starts).
+  allowedDevOrigins: Object.values(networkInterfaces())
+    .flat()
+    .filter((i) => i?.family === "IPv4" && !i.internal)
+    .map((i) => i!.address),
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

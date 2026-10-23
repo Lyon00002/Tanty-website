@@ -42,6 +42,8 @@
 
   /* Corporate ground (Nestlé-like): white pages, photography and brand color in bands. */
   --nid-tint: #fff8d9;
+  /* Where a photograph is going to be and is not yet: two per cent off white (NowTech's value). */
+  --nid-placeholder: #f6f7f5;
   --nid-line: #e7e2cf;
 
   font-family: var(--nid-font-body);
@@ -61,15 +63,6 @@ html:has(.w-nid) {
   scrollbar-color: var(--nid-green) var(--nid-straw);
   accent-color: var(--nid-green);
   caret-color: var(--nid-green);
-}
-
-/* Smooth scrolling, as in the E-shop project: an anchor glides to its
-   section, and coming back to a page glides back to where the visitor was
-   (Next 16 leaves scroll-behavior alone during navigation). */
-@media (prefers-reduced-motion: no-preference) {
-  html:has(.w-nid) {
-    scroll-behavior: smooth;
-  }
 }
 
 .w-nid ::selection {

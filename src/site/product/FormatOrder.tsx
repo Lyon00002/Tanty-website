@@ -4,6 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { useId, useState } from "react";
 import type { Product } from "@/data/products";
 import { whatsappOrderUrl } from "@/lib/whatsapp";
+import { Price } from "../products/PriceTag";
 import { Action } from "../ui/Action";
 
 /**
@@ -13,6 +14,7 @@ import { Action } from "../ui/Action";
  */
 export function FormatOrder({ product }: { product: Product }) {
   const [format, setFormat] = useState(product.formats[0]?.label ?? "");
+  const price = product.formats.find((f) => f.label === format)?.price;
   const name = useId();
   const multiple = product.formats.length > 1;
 
@@ -39,11 +41,17 @@ export function FormatOrder({ product }: { product: Product }) {
           })}
         </div>
       </fieldset>
-      <Action href={whatsappOrderUrl(product, format)} className="mt-6 sm:mt-8">
+      {/* The price of the chosen format (its tag above already says which one) */}
+      {price !== undefined && (
+        <p className="mt-6 sm:mt-7">
+          <Price amount={price} className="text-[3.5rem] sm:text-[4.75rem]" />
+        </p>
+      )}
+      <Action href={whatsappOrderUrl(product, format)} className={price !== undefined ? "mt-4 sm:mt-5" : "mt-6 sm:mt-8"}>
         <MessageCircle aria-hidden="true" className="size-5" />
         Commander sur WhatsApp
       </Action>
-      <p className="mt-2.5 text-[0.75rem] text-[var(--nid-ink-soft)] sm:mt-3 sm:text-sm">Prix et disponibilité : TANTY vous répond sur WhatsApp.</p>
+      <p className="mt-2.5 text-[0.75rem] text-[var(--nid-ink-soft)] sm:mt-3 sm:text-sm">{price !== undefined ? "Prix indicatif. Prix et disponibilité confirmés sur WhatsApp." : "Prix et disponibilité : TANTY vous répond sur WhatsApp."}</p>
     </div>
   );
 }

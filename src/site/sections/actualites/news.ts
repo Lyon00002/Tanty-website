@@ -11,7 +11,7 @@ export interface NewsItem {
   date: string;
   dateLabel: string;
   title: string;
-  image: { src: string; alt: string; position?: string };
+  image: { src: string; alt: string; position?: string; blur?: string };
 }
 
 export const NEWS: NewsItem[] = [
