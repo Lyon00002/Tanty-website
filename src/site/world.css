@@ -594,6 +594,9 @@ a:focus-visible > .nid-bubble {
 .nid-skeleton {
   background-color: var(--nid-placeholder);
   overflow: hidden;
+  /* The photo's z-index (over the sweep) stays inside its frame: a card's link stretched
+     over the whole card (ProductCard) stays on top of the photo, so a tap on it opens the card. */
+  isolation: isolate;
 }
 
 .nid-skeleton img {

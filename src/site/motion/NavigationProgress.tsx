@@ -12,9 +12,11 @@ const SHOW_AFTER = 120;
 /**
  * The loading bar: a thin TANTY yellow line along the top of the screen
  * while the next page loads, so a slow connection never looks like a dead
- * click. It starts on a click towards another page (or back / forward),
- * creeps forward while waiting, fills up when the new page is there, then
- * fades. Written straight to the DOM: no re-render while it moves.
+ * click. It starts on a click towards another page (not on the browser's
+ * back / forward: a page already seen comes back from the cache at once, the
+ * bar only flashed there, user feedback), creeps forward while waiting, fills
+ * up when the new page is there, then fades. Written straight to the DOM: no
+ * re-render while it moves.
  */
 export function NavigationProgress() {
   const pathname = usePathname();
@@ -80,20 +82,11 @@ export function NavigationProgress() {
       if (url.pathname === window.location.pathname && url.search === window.location.search) return;
       start();
     };
-    const onPop = () => {
-      start();
-      // Back to the same page (a different anchor): nothing to load.
-      window.setTimeout(() => {
-        if (run.current && !run.current.shown) finish.current();
-      }, SHOW_AFTER);
-    };
 
     document.addEventListener("click", onClick, true);
-    window.addEventListener("popstate", onPop);
     window.addEventListener(NAVIGATION_START, start);
     return () => {
       document.removeEventListener("click", onClick, true);
-      window.removeEventListener("popstate", onPop);
       window.removeEventListener(NAVIGATION_START, start);
       clear();
     };
@@ -105,7 +98,8 @@ export function NavigationProgress() {
   }, [pathname]);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-[3px]">
+    // Thicker than a hairline so it shows on phones (user request): 5 px there, 4 px on wide screens.
+    <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-[5px] lg:h-1">
       <div ref={bar} data-active="false" className="nid-progress h-full origin-left bg-[var(--nid-yellow)]" style={{ transform: "scaleX(0)" }} />
     </div>
   );

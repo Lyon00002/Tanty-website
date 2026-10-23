@@ -48,7 +48,8 @@ export function RangeProducts({ range }: { range: Category }) {
             </div>
           </article>
         ) : (
-          <ul className="mt-10 grid grid-cols-3 gap-x-2.5 gap-y-5 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
+          <ul className="mt-10 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
+            {/* Phones: two columns, as the catalogue (user request); tablets three, desktop four */}
             {products.map((p) => (
               <li key={p.id} data-reveal="" className="flex">
                 <ProductCard product={p} />

@@ -32,8 +32,8 @@ export function ProductCard({ product, showRange }: { product: Product; showRang
         </h3>
         {price !== undefined && (
           <p className="mt-1.5 sm:mt-2">
-            {/* As large to the eye as the name (0.8125rem, then 1.125rem): the narrow figures take a fifth more */}
-            <Price amount={price} className="text-[1rem] sm:text-[1.375rem]" />
+            {/* Larger than the name (0.8125rem, then 1.125rem), on phones as on desktop (user choice) */}
+            <Price amount={price} className="text-[1.25rem] sm:text-[1.75rem]" />
           </p>
         )}
         {showRange && <p className="mt-1 text-[0.6875rem] font-semibold text-[var(--nid-ink-soft)] sm:mt-1.5 sm:text-sm">{getCategory(product.category).short}</p>}

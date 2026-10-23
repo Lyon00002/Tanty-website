@@ -67,7 +67,8 @@ export default function CataloguePage() {
         </PageBand>
 
         <section aria-label="Tous les produits" className="nid-on-white pb-20 pt-14 lg:pb-28 lg:pt-20">
-          <ul className="nid-wrap grid grid-cols-3 gap-x-2.5 gap-y-5 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
+          {/* Phones: two columns (user request); tablets three, desktop four */}
+          <ul className="nid-wrap grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-7 lg:gap-y-14">
             {products.map((p) => (
               <li key={p.id} data-reveal="" className="flex">
                 <ProductCard product={p} showRange />
