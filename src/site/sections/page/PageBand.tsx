@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { blurFor } from "@/lib/blur";
 import { BandEdge } from "../../borders/BandEdge";
 import { Breadcrumbs, type Crumb } from "../../range/Breadcrumbs";
 
@@ -31,6 +32,7 @@ export function PageBand({ id, crumbs, title, lead, photo, children, aside }: Pa
         alt=""
         fill
         preload
+        {...(blurFor(photo.src) ? { placeholder: "blur" as const, blurDataURL: blurFor(photo.src) } : {})}
         sizes="100vw"
         className="-z-20 object-cover grayscale"
         style={{ objectPosition: photo.position ?? "50% 50%" }}

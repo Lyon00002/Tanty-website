@@ -4,6 +4,7 @@ import { getCategory } from "@/data/categories";
 import type { Product } from "@/data/products";
 import { STORE_LINKS, routes } from "../routes";
 import { formatList } from "./formats";
+import { priceLabel } from "./price";
 import { ProductImage } from "./ProductImage";
 
 /**
@@ -14,6 +15,7 @@ import { ProductImage } from "./ProductImage";
  * leans in, the name turns green and the arrow steps forward.
  */
 export function ProductCard({ product, showRange }: { product: Product; showRange?: boolean }) {
+  const price = priceLabel(product);
   return (
     <article className="nid-card group relative flex w-full flex-col">
       <ProductImage product={product} />
@@ -28,6 +30,7 @@ export function ProductCard({ product, showRange }: { product: Product; showRang
           )}
         </h3>
         {showRange && <p className="mt-0.5 text-[0.6875rem] font-semibold text-[var(--nid-green)] sm:mt-1 sm:text-sm">{getCategory(product.category).short}</p>}
+        {price && <p className="nid-num mt-1 text-[0.8125rem] font-semibold text-[var(--nid-ink)] sm:text-base">{price}</p>}
         <p className="nid-num mt-1 hidden text-sm leading-snug text-[var(--nid-ink-soft)] sm:block">{formatList(product)}</p>
         {STORE_LINKS && (
           <p className="mt-auto hidden items-center gap-1.5 pt-3 text-sm font-bold text-[var(--nid-green)] sm:flex" aria-hidden="true">

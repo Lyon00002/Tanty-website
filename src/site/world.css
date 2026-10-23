@@ -464,11 +464,9 @@ a:focus-visible > .nid-bubble {
 }
 
 .nid-sunpath {
-  --sky: 5.5rem;
+  --sky: 4.5rem;
   display: grid;
   grid-template-columns: repeat(var(--n), minmax(0, 1fr));
-  /* Phones: the row keeps a readable width and is swiped sideways. */
-  min-width: calc(var(--n) * 6.5rem);
 }
 
 .nid-sunpath-arc {
@@ -482,8 +480,7 @@ a:focus-visible > .nid-bubble {
 
 .nid-sunpath-step {
   position: relative;
-  padding-right: 0.75rem;
-  padding-top: calc(var(--sky) * (1 - 0.92 * var(--h)) + 1.25rem);
+  padding-top: calc(var(--sky) * (1 - 0.92 * var(--h)) + 1rem);
 }
 
 .nid-sunpath-step .nid-sun {
@@ -491,36 +488,64 @@ a:focus-visible > .nid-bubble {
   left: 0;
   top: calc(var(--sky) * (1 - 0.92 * var(--h)));
   translate: -50% -50%;
+  transition:
+    scale 0.45s var(--nid-ease-out),
+    box-shadow 0.45s var(--nid-ease-out);
 }
 
-/* The strip that holds the row on phones (SunPath): edge to edge, no scrollbar, room for the glow. */
-.nid-sunpath-scroll {
-  margin-inline: calc(var(--nid-gutter) * -1);
-  padding: 2.5rem var(--nid-gutter) 0.5rem;
-  margin-top: -2.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
+/* Phones: the whole arc in miniature, the year centred under its sun; the sun of
+   the step told in the caption (SunPath) swells and shines. */
+.nid-sunpath-year {
+  font-size: 0.8125rem;
+  color: var(--nid-ink-soft);
+  transition: color 0.3s var(--nid-ease-out);
 }
 
-.nid-sunpath-scroll::-webkit-scrollbar {
-  display: none;
+@media (max-width: 1023.98px) {
+  .nid-sunpath-step [data-say] {
+    translate: -50% 0;
+    width: max-content;
+  }
+
+  .nid-sunpath-step[data-active="true"] .nid-sun {
+    scale: 1.45;
+    box-shadow:
+      0 0 0 6px rgb(254 204 0 / 0.28),
+      0 0 34px 12px rgb(254 204 0 / 0.3);
+  }
+
+  .nid-sunpath-step[data-active="true"] .nid-sunpath-year {
+    color: var(--nid-green-deep);
+    font-weight: 800;
+  }
 }
 
 @media (min-width: 1024px) {
+  /* The sky grows with the screen, so the arc keeps its climb on extra-large screens
+     (a fixed 9rem flattened it as the row widened). */
   .nid-sunpath {
-    --sky: 9rem;
-    min-width: 0;
+    --sky: clamp(9rem, 10.5vw, 17rem);
+  }
+
+  .nid-sunpath-year {
+    font-size: 1.7rem;
+    color: var(--nid-green);
+  }
+
+  /* Desktop: the suns at their full size (they are smaller only on phones). */
+  .nid-sun {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+
+  .nid-sun-high {
+    width: 1.875rem;
+    height: 1.875rem;
   }
 
   .nid-sunpath-step {
     padding-right: 1.5rem;
     padding-top: calc(var(--sky) * (1 - 0.92 * var(--h)) + 1.75rem);
-  }
-
-  .nid-sunpath-scroll {
-    margin: 0;
-    padding: 0;
-    overflow: visible;
   }
 }
 
@@ -538,60 +563,53 @@ a:focus-visible > .nid-bubble {
   appearance: none;
 }
 
-/* Photos waiting to load (Photo): a soft light sweeps over the grey ground
-   of their frame, then the photo fades in. Only when scripts run; the sweep
-   stops if the photo cannot load, and stays still under reduced motion.
-   Safety net: if the scripts never take over (blocked or failed), the photo
-   shows anyway after 3 s and the sweep stops (nid-photo-safety). */
+/* Photos waiting to load (Photo), the way the NowTech storefront does it.
+   THE SKELETON IS BEHIND THE PHOTO, NOT OVER IT: the photo is never hidden,
+   so a photo already in the browser's cache paints in the first frame, with
+   or without scripts. While its pixels have not arrived it is transparent and
+   the frame shows through: an almost white ground (--nid-placeholder, a frame
+   the eye passes over) with a slow, light sweep that says "not yet" rather
+   than "empty". Photo removes the sweep once the photo has loaded, or failed
+   (a 404 would otherwise shimmer for ever). Photos with a blurred placeholder
+   show that blur at once instead, over the frame. Still under reduced motion. */
+.nid-skeleton {
+  background-color: var(--nid-placeholder);
+  overflow: hidden;
+}
+
 .nid-skeleton img {
-  transition: opacity 0.5s var(--nid-ease-out);
+  z-index: 1;
 }
 
-@keyframes nid-photo-safety {
+.nid-skeleton img[data-nimg="1"] {
+  position: relative;
+}
+
+.nid-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgb(255 255 255 / 0) 0%, rgb(255 255 255 / 0.55) 50%, rgb(255 255 255 / 0) 100%);
+  transform: translateX(-100%);
+  animation: nid-sweep 2200ms infinite;
+}
+
+.nid-skeleton:has(img[data-state="loaded"], img[data-state="error"], img[data-blur])::after {
+  display: none;
+}
+
+@keyframes nid-sweep {
   to {
-    opacity: 1;
-  }
-}
-
-@keyframes nid-sweep-safety {
-  to {
-    visibility: hidden;
-  }
-}
-
-@media (scripting: enabled) {
-  .nid-skeleton img[data-state="loading"] {
-    opacity: 0;
-    animation: nid-photo-safety 0.5s ease 3s forwards;
-  }
-
-  .nid-skeleton:has(img[data-state="loading"])::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-      linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.65) 50%, transparent 70%) 0 0 / 220% 100% no-repeat,
-      #eef2f4;
-    animation:
-      nid-shimmer 1.4s ease-in-out infinite,
-      nid-sweep-safety 0s linear 3.4s forwards;
-  }
-}
-
-@keyframes nid-shimmer {
-  from {
-    background-position: 130% 0, 0 0;
-  }
-
-  to {
-    background-position: -130% 0, 0 0;
+    transform: translateX(200%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .nid-skeleton::after {
-    animation: none !important;
+    animation: none;
+    opacity: 0;
   }
 }
 
@@ -713,15 +731,26 @@ a:focus-visible > .nid-bubble {
   /* Phones and tablets: the card as wide as the content and as tall (doubled from 2:1, user request), owning little scroll. */
   --card: calc(100vw - 2 * var(--nid-gutter));
   --h: calc(var(--card) + 5rem);
-  --top: 4rem;
-  --step: 8px;
+  /* Where the cards stick: right under the sticky header (80 px on phones, 88 on tablets, the 64 px bar + air on desktop). */
+  --top: 5rem;
+  /* Phones: a clear step between the piled cards (8 px was lost on cards this tall). */
+  --step: 18px;
   margin-top: calc((var(--h) - var(--card)) / -2);
   overflow-x: clip;
 }
 
+/* Phones: twice as tall as wide (user request); the three piled cards, their steps
+   included, always fit on the screen under the header. */
+@media (max-width: 639.98px) {
+  .nid-stack {
+    --card: min(calc((100vw - 2 * var(--nid-gutter)) * 2), calc(100svh - 5rem - 1.5rem - 2 * var(--step) - 1rem));
+    --h: calc(var(--card) + 3rem);
+  }
+}
+
 @media (min-width: 640px) {
   .nid-stack {
-    --top: 5rem;
+    --top: 5.5rem;
     --step: 12px;
   }
 }
@@ -730,6 +759,7 @@ a:focus-visible > .nid-bubble {
   .nid-stack {
     --h: calc(100svh - 5rem);
     --card: min(40rem, calc(100svh - 11rem));
+    --top: 5rem;
     --step: 24px;
   }
 }

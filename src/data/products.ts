@@ -15,7 +15,8 @@ import type { CategoryId } from "./categories";
  * Rules:
  * - Only verified text goes into `description` and `facts`. When nothing is
  *   verified, leave the field undefined: the UI handles its absence.
- * - `price` stays undefined until NTFoods confirms current prices.
+ * - Prices are per format (`formats[].price`), taken from the old shop's
+ *   catalogue (2025); the site shows them as indicative until NTFoods confirms.
  * - `image` stays undefined until the official photo is supplied; the UI then
  *   shows the branded placeholder sized for the packaging kind.
  */
@@ -35,6 +36,12 @@ export interface ProductFormat {
   /** As printed or sold, e.g. "57 g", "2 L". */
   label: string;
   packaging: PackagingKind;
+  /**
+   * Price in FCFA, as displayed by the old tanty.cm shop (catalogue_tanty_structure.csv,
+   * 2025: the promo price when there is one; the regular price where the shop showed 0).
+   * Indicative until NTFoods confirms it.
+   */
+  price?: number;
 }
 
 export interface ProductImageAsset {
@@ -62,7 +69,6 @@ export interface Product {
   facts?: readonly ProductFact[];
   image?: ProductImageAsset;
   gallery?: readonly ProductImageAsset[];
-  price?: { amount: number; currency: "XAF" };
   /** false = known from older sources, availability to confirm with NTFoods. */
   published: boolean;
   featured?: boolean;
@@ -81,8 +87,8 @@ export const products: readonly Product[] = [
     line: "TANTY Reine",
     category: "reine",
     formats: [
-      { label: "Sachet 57 g", packaging: "sachet" },
-      { label: "Étui 200 g", packaging: "etui" },
+      { label: "Sachet 57 g", packaging: "sachet", price: 300 },
+      { label: "Étui 200 g", packaging: "etui", price: 1000 },
     ],
     description: "Bouillie de soja infantile Reine aux multi-céréales, à base de maïs et de soja.",
     facts: [
@@ -98,7 +104,7 @@ export const products: readonly Product[] = [
     name: "Reine Classic",
     line: "TANTY Reine",
     category: "reine",
-    formats: [{ label: "Sachet 57 g", packaging: "sachet" }],
+    formats: [{ label: "Sachet 57 g", packaging: "sachet", price: 300 }],
     description: "Bouillie de soja infantile Reine, recette Classic, à base de maïs et de soja.",
     published: true,
   },
@@ -108,7 +114,7 @@ export const products: readonly Product[] = [
     name: "Reine Arachides",
     line: "TANTY Reine",
     category: "reine",
-    formats: [{ label: "Sachet 57 g", packaging: "sachet" }],
+    formats: [{ label: "Sachet 57 g", packaging: "sachet", price: 300 }],
     description: "Bouillie de soja infantile Reine aux arachides, à base de maïs et de soja.",
     published: true,
   },
@@ -119,8 +125,8 @@ export const products: readonly Product[] = [
     line: "TANTY Reine",
     category: "reine",
     formats: [
-      { label: "Sachet 57 g", packaging: "sachet" },
-      { label: "Étui 200 g", packaging: "etui" },
+      { label: "Sachet 57 g", packaging: "sachet", price: 300 },
+      { label: "Étui 200 g", packaging: "etui", price: 1000 },
     ],
     // Pack (official photo, 2026): "Bouillie de soja infantile", à cuire, dès 6 mois, format Prestige.
     description: "Bouillie de soja infantile Reine Lactée Croissance, à cuire, dès 6 mois.",
@@ -134,8 +140,8 @@ export const products: readonly Product[] = [
     line: "TANTY Reine",
     category: "reine",
     formats: [
-      { label: "Sachet 57 g", packaging: "sachet" },
-      { label: "Étui 200 g", packaging: "etui" },
+      { label: "Sachet 57 g", packaging: "sachet", price: 300 },
+      { label: "Étui 200 g", packaging: "etui", price: 1000 },
     ],
     description: "Bouillie de soja infantile Reine au poisson, à base de maïs et de soja.",
     published: true,
@@ -196,7 +202,7 @@ export const products: readonly Product[] = [
     name: "TANTY Parfumé",
     line: "TANTY Prestige",
     category: "prestige",
-    formats: [{ label: "Étui Prestige 200 g", packaging: "etui" }],
+    formats: [{ label: "Étui Prestige 200 g", packaging: "etui", price: 1000 }],
     description: "La bouillie de soja parfumée aux fruits, quatrième variété des bouillies TANTY, créée en 2006.",
     facts: [{ label: "Composition (2011)", value: "Maïs prégermé, soja, cocktail de fruits" }],
     published: true,
@@ -208,7 +214,7 @@ export const products: readonly Product[] = [
     name: "TANTY Lactée",
     line: "TANTY Prestige",
     category: "prestige",
-    formats: [{ label: "Étui Prestige 200 g", packaging: "etui" }],
+    formats: [{ label: "Étui Prestige 200 g", packaging: "etui", price: 1000 }],
     // Old shop text (2025): third of the TANTY porridges, 2004, calcium from fish bones.
     description:
       "Créée en 2004, troisième des bouillies TANTY. Elle permet une meilleure croissance grâce au calcium contenu dans les arêtes de poisson.",
@@ -226,7 +232,7 @@ export const products: readonly Product[] = [
     name: "Baby Vita",
     line: "Baby Vita",
     category: "babyvita",
-    formats: [{ label: "Seau 1200 g", packaging: "seau" }],
+    formats: [{ label: "Seau 1200 g", packaging: "seau", price: 2000 }],
     description: "Bouillie enrichie pour assurer une croissance et un éveil continu à vos enfants.",
     facts: [{ label: "Sur l'emballage", value: "Patate, moringa, multifruits" }],
     published: true,
@@ -241,9 +247,9 @@ export const products: readonly Product[] = [
     category: "reine",
     description: "Bouillie de soja infantile au parfum de la banane, 100 % naturelle et très économique.",
     formats: [
-      { label: "1 L", packaging: "seau" },
-      { label: "2 L", packaging: "seau" },
-      { label: "5 L", packaging: "seau" },
+      { label: "1 L", packaging: "seau", price: 1500 },
+      { label: "2 L", packaging: "seau", price: 2500 },
+      { label: "5 L", packaging: "seau", price: 4500 },
     ],
     published: true,
   },
@@ -255,9 +261,9 @@ export const products: readonly Product[] = [
     category: "reine",
     description: "Bouillie de soja infantile à la fraise, 100 % naturelle et très économique.",
     formats: [
-      { label: "1 L", packaging: "seau" },
-      { label: "2 L", packaging: "seau" },
-      { label: "5 L", packaging: "seau" },
+      { label: "1 L", packaging: "seau", price: 1100 },
+      { label: "2 L", packaging: "seau", price: 2500 },
+      { label: "5 L", packaging: "seau", price: 4500 },
     ],
     published: true,
   },
@@ -269,9 +275,9 @@ export const products: readonly Product[] = [
     category: "reine",
     description: "Bouillie aux fruits et aux œufs, 100 % naturelle et très économique.",
     formats: [
-      { label: "1 L", packaging: "seau" },
-      { label: "2 L", packaging: "seau" },
-      { label: "5 L", packaging: "seau" },
+      { label: "1 L", packaging: "seau", price: 1100 },
+      { label: "2 L", packaging: "seau", price: 2500 },
+      { label: "5 L", packaging: "seau", price: 4500 },
     ],
     published: true,
   },
@@ -283,9 +289,9 @@ export const products: readonly Product[] = [
     category: "reine",
     description: "Bouillie lactée biscuitée, 100 % naturelle et très économique.",
     formats: [
-      { label: "1 L", packaging: "seau" },
-      { label: "2 L", packaging: "seau" },
-      { label: "5 L", packaging: "seau" },
+      { label: "1 L", packaging: "seau", price: 1100 },
+      { label: "2 L", packaging: "seau", price: 2500 },
+      { label: "5 L", packaging: "seau", price: 4500 },
     ],
     published: true,
   },
@@ -299,9 +305,9 @@ export const products: readonly Product[] = [
     category: "grignoter",
     description: GRIGNOTER,
     formats: [
-      { label: "Mini 45 g", packaging: "mini-sachet" },
-      { label: "Moyen 125 g", packaging: "doypack" },
-      { label: "Grand 273 g", packaging: "doypack" },
+      { label: "Mini 45 g", packaging: "mini-sachet", price: 100 },
+      { label: "Moyen 125 g", packaging: "doypack", price: 500 },
+      { label: "Grand 273 g", packaging: "doypack", price: 1000 },
     ],
     published: true,
     featured: true,
@@ -314,8 +320,8 @@ export const products: readonly Product[] = [
     category: "grignoter",
     description: GRIGNOTER,
     formats: [
-      { label: "Mini 45 g", packaging: "mini-sachet" },
-      { label: "Moyen 136 g", packaging: "doypack" },
+      { label: "Mini 45 g", packaging: "mini-sachet", price: 100 },
+      { label: "Moyen 136 g", packaging: "doypack", price: 1000 },
     ],
     published: true,
   },
@@ -327,9 +333,9 @@ export const products: readonly Product[] = [
     category: "grignoter",
     description: GRIGNOTER,
     formats: [
-      { label: "Mini 30 g", packaging: "mini-sachet" },
-      { label: "Moyen 95 g", packaging: "doypack" },
-      { label: "Grand 227 g", packaging: "doypack" },
+      { label: "Mini 30 g", packaging: "mini-sachet", price: 100 },
+      { label: "Moyen 95 g", packaging: "doypack", price: 1000 },
+      { label: "Grand 227 g", packaging: "doypack", price: 1000 },
     ],
     published: true,
   },
@@ -340,7 +346,7 @@ export const products: readonly Product[] = [
     line: "TANTY à Grignoter",
     category: "grignoter",
     description: GRIGNOTER,
-    formats: [{ label: "Moyen 80 g", packaging: "doypack" }],
+    formats: [{ label: "Moyen 80 g", packaging: "doypack", price: 1000 }],
     published: true,
   },
   {
@@ -350,7 +356,7 @@ export const products: readonly Product[] = [
     line: "TANTY à Grignoter",
     category: "grignoter",
     description: GRIGNOTER,
-    formats: [{ label: "36 g", packaging: "mini-sachet" }],
+    formats: [{ label: "36 g", packaging: "mini-sachet", price: 100 }],
     published: true,
   },
 
@@ -361,7 +367,7 @@ export const products: readonly Product[] = [
     name: "Chapelure",
     line: "TANTY",
     category: "chapelure",
-    formats: [{ label: "Étui 200 g", packaging: "etui" }],
+    formats: [{ label: "Étui 200 g", packaging: "etui", price: 700 }],
     description:
       "Pour paner et gratiner viandes et poissons, et préparer vos farces. Issue de pâtes levées, avec la note de l'arachide.",
     facts: [
@@ -380,7 +386,7 @@ export const products: readonly Product[] = [
     name: "Piment de table",
     line: "TANTY",
     category: "piment",
-    formats: [{ label: "200 ml", packaging: "flacon" }],
+    formats: [{ label: "200 ml", packaging: "flacon", price: 2000 }],
     description:
       "Le piment de table TANTY rehausse vos plats grâce à son goût unique. Facile à utiliser et à conserver, il accompagne aussi vos réceptions : mariages, baptêmes, anniversaires.",
     facts: [{ label: "Sur l'emballage", value: "Naturel" }],
@@ -422,10 +428,10 @@ export const products: readonly Product[] = [
     line: "TANTY",
     category: "choco",
     formats: [
-      { label: "1 L", packaging: "inconnu" },
-      { label: "2 L", packaging: "inconnu" },
-      { label: "5 L", packaging: "inconnu" },
-      { label: "10 L", packaging: "inconnu" },
+      { label: "1 L", packaging: "inconnu", price: 2000 },
+      { label: "2 L", packaging: "inconnu", price: 5000 },
+      { label: "5 L", packaging: "inconnu", price: 8000 },
+      { label: "10 L", packaging: "inconnu", price: 20000 },
     ],
     description: "Chocolat à tartiner made in Cameroun, fabriqué avec les produits et la main-d'œuvre locale, à tartiner en toute sécurité.",
     published: true,

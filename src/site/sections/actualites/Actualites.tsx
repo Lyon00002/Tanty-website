@@ -1,3 +1,4 @@
+import { blurFor } from "@/lib/blur";
 import { NEWS } from "./news";
 import { NewsCarousel } from "./NewsCarousel";
 
@@ -11,7 +12,7 @@ export function Actualites() {
           <span className="nid-dot">.</span>
         </h2>
         <div className="mt-10">
-          <NewsCarousel items={NEWS} />
+          <NewsCarousel items={NEWS.map((n) => ({ ...n, image: { ...n.image, blur: blurFor(n.image.src) } }))} />
         </div>
       </div>
     </section>

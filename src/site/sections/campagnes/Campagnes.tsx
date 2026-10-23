@@ -2,45 +2,11 @@
 
 import Link from "next/link";
 import { useRef, type CSSProperties } from "react";
-import { getCategory, type CategoryId } from "@/data/categories";
+import { getCategory } from "@/data/categories";
 import { gsap, MOTION_OK, useGSAP } from "../../motion/gsap";
 import { RANGE_LINKS, STORE_LINKS, routes } from "../../routes";
 import { Photo } from "../../ui/Photo";
-
-interface Campaign {
-  range: CategoryId;
-  /** Wide visual. */
-  src: string;
-  /**
-   * Framing while the visuals are wider than the card (2.38:1 in a 2:1
-   * card): the visual fills the card and this keeps its key part in view
-   * (CSS object-position).
-   */
-  focus: string;
-  alt: string;
-}
-
-/** The client's three campaign visuals (public/brand/campagnes, see SOURCES.md); their headlines are part of the images. */
-const CAMPAIGNS: Campaign[] = [
-  {
-    range: "reine",
-    src: "/brand/campagnes/reine.webp",
-    focus: "80% 50%",
-    alt: "Campagne TANTY Reine « Pour mieux grandir » : une mère donne la bouillie à son bébé, à côté d'un seau Reine Custard Powder Banane et des étuis Reine.",
-  },
-  {
-    range: "grignoter",
-    src: "/brand/campagnes/a-grignoter.webp",
-    focus: "12% 50%",
-    alt: "Campagne TANTY À Grignoter « … en toute sécurité ! » : deux amis partagent des arachides enrobées, des arachides caramélisées, des croquettes et des chips de plantain.",
-  },
-  {
-    range: "chapelure",
-    src: "/brand/campagnes/chapelure.webp",
-    focus: "83% 50%",
-    alt: "Campagne TANTY Chapelure « Dorée et croustillante » : une cheffe saupoudre de la chapelure sur des cuisses de poulet, à côté de l'étui TANTY Chapelure.",
-  },
-];
+import { CAMPAIGNS } from "./campaigns";
 
 /** Name of the scroll timeline that follows card k's approach. */
 const rise = (k: number) => `--nid-rise-${k}`;
@@ -63,7 +29,8 @@ const rise = (k: number) => `--nid-rise-${k}`;
  * without named view timelines get the same motion from GSAP ScrollTrigger.
  * Nothing moves under reduced motion.
  */
-export function Campagnes() {
+/** `blurs`: the visuals' blurred placeholders, by src (given by the server page). */
+export function Campagnes({ blurs = {} }: { blurs?: Record<string, string | undefined> }) {
   const stack = useRef<HTMLDivElement>(null);
   const n = CAMPAIGNS.length;
 
@@ -75,7 +42,8 @@ export function Campagnes() {
       const mm = gsap.matchMedia();
       mm.add({ motion: MOTION_OK, sm: "(min-width: 640px)" }, (ctx) => {
         if (!ctx.conditions?.motion) return;
-        const top = ctx.conditions.sm ? 80 : 64;
+        // Where the cards stick: the stack's --top (rem), as in the CSS.
+        const top = parseFloat(getComputedStyle(el).getPropertyValue("--top")) * parseFloat(getComputedStyle(document.documentElement).fontSize) || 80;
         const marks = gsap.utils.toArray<HTMLElement>("[data-mark]", el);
         const lands = gsap.utils.toArray<HTMLElement>("[data-land]", el);
         const dims = gsap.utils.toArray<HTMLElement>("[data-dim]", el);
@@ -129,7 +97,7 @@ export function Campagnes() {
           return (
             <div
               key={c.range}
-              className="pointer-events-none sticky top-16 flex min-h-[var(--h)] flex-col items-center justify-center sm:top-20"
+              className="pointer-events-none sticky top-[var(--top)] flex min-h-[var(--h)] flex-col items-center justify-center"
               style={{ zIndex: k + 1 }}
             >
               {/* As wide as the section's content: only its side padding around (as the title above) */}
@@ -144,6 +112,7 @@ export function Campagnes() {
                       <span className="nid-skeleton absolute inset-0">
                         <Photo
                           src={c.src}
+                          blur={blurs[c.src]}
                           alt=""
                           fill
                           sizes="(min-width: 768px) 80rem, 100vw"

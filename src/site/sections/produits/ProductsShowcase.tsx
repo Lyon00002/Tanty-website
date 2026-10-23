@@ -10,6 +10,7 @@ import { Photo } from "../../ui/Photo";
 export interface ShowcasePhoto {
   src: string;
   alt: string;
+  blur?: string;
 }
 
 export interface ShowcaseItem {
@@ -18,6 +19,8 @@ export interface ShowcaseItem {
   /** Range short name, shown only when it differs from the product name. */
   range?: string;
   formats: string;
+  /** "dès 100 FCFA": the price at a glance, when known. */
+  price?: string;
   packaging: PackagingKind;
   orderUrl: string;
   /** Product sheet in the store; undefined while the store is closed. */
@@ -88,6 +91,7 @@ export function ProductsShowcase({
             <Photo
               key={photo.src}
               src={photo.src}
+              blur={photo.blur}
               alt={current.href || k !== frame ? "" : photo.alt}
               fill
               sizes="24rem"
@@ -161,7 +165,7 @@ export function ProductsShowcase({
                 className="nid-skeleton relative flex h-[56px] w-[42px] shrink-0 items-center justify-center overflow-hidden rounded-[2px] sm:h-[88px] sm:w-[70px] xl:h-[96px] xl:w-[76px]"
               >
                 {item.photos[0] ? (
-                  <Photo src={item.photos[0].src} alt="" fill sizes="80px" className="object-cover" />
+                  <Photo src={item.photos[0].src} blur={item.photos[0].blur} alt="" fill sizes="80px" className="object-cover" />
                 ) : (
                   <PackagingIcon kind={item.packaging} className="h-14 w-auto xl:h-16" />
                 )}
@@ -179,6 +183,7 @@ export function ProductsShowcase({
                   {item.name}
                 </span>
                 <span className="nid-num mt-1 hidden text-sm leading-snug text-[var(--nid-ink-soft)] sm:block">{item.formats}</span>
+                {item.price && <span className="nid-num mt-0.5 block text-[0.75rem] font-semibold text-[var(--nid-ink)] sm:mt-1 sm:text-sm">{item.price}</span>}
               </span>
             );
             const preview = {

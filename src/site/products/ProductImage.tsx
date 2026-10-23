@@ -26,6 +26,7 @@ export function ProductImage({ product, className, sizes = "(min-width: 1024px) 
         <Photo
           src={photo.src}
           alt={photo.alt}
+          blur={photo.blur}
           fill
           sizes={sizes}
           className="object-cover transition-[scale] duration-500 ease-[var(--nid-ease-out)] group-hover:scale-[1.03]"

@@ -1,4 +1,5 @@
 import { company } from "@/data/company";
+import { blurFor } from "@/lib/blur";
 import { Photo } from "../../ui/Photo";
 
 /**
@@ -36,6 +37,7 @@ export function Histoire() {
           <div data-reveal="clip" className="nid-skeleton relative aspect-[4/5] overflow-hidden rounded-[2px]">
             <Photo
               src="/brand/histoire/ambassadrice-bras-charges-sourire.webp"
+              blur={blurFor("/brand/histoire/ambassadrice-bras-charges-sourire.webp")}
               alt="Une ambassadrice TANTY, en casquette et t-shirt jaunes, les bras chargés de sachets TANTY À Grignoter."
               fill
               sizes="(min-width: 1024px) 30rem, 85vw"
@@ -46,6 +48,7 @@ export function Histoire() {
             <div className="nid-skeleton relative aspect-[4/5]">
               <Photo
                 src="/brand/histoire/ambassadrice-deux-sachets.webp"
+              blur={blurFor("/brand/histoire/ambassadrice-deux-sachets.webp")}
                 alt="Une ambassadrice TANTY présente deux sachets TANTY À Grignoter."
                 fill
                 sizes="(min-width: 1024px) 15rem, 45vw"

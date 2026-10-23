@@ -1,4 +1,6 @@
+import { blurFor } from "@/lib/blur";
 import { Campagnes } from "@/site/sections/campagnes/Campagnes";
+import { CAMPAIGNS } from "@/site/sections/campagnes/campaigns";
 import { Parcours } from "@/site/sections/parcours/Parcours";
 import { Actualites } from "@/site/sections/actualites/Actualites";
 import { CorporateHeader } from "@/site/navigation/corporate/CorporateHeader";
@@ -28,7 +30,7 @@ export default function NidHome() {
       <CorporateHeader />
       <main id="contenu">
         <VideoHero />
-        <Campagnes />
+        <Campagnes blurs={Object.fromEntries(CAMPAIGNS.map((c) => [c.src, blurFor(c.src)]))} />
         <Histoire />
         <Parcours />
         <Gammes />

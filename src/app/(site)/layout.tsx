@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Archivo, Libre_Franklin } from "next/font/google";
 import { SiteAudio } from "@/site/audio/SiteAudio";
+import { AnchorScroll } from "@/site/motion/AnchorScroll";
 import { NavigationProgress } from "@/site/motion/NavigationProgress";
 import { RevealRoot } from "@/site/motion/RevealRoot";
 import { ConnectionStatus } from "@/site/ui/ConnectionStatus";
@@ -33,6 +34,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
       <NavigationProgress />
       <SiteAudio>{children}</SiteAudio>
       <RevealRoot />
+      <AnchorScroll />
       <ConnectionStatus />
       <OfflineSupport />
     </div>

@@ -75,6 +75,7 @@ export function NewsCarousel({ items }: { items: NewsItem[] }) {
               <div className="nid-skeleton relative h-[var(--news-img-h)] overflow-hidden rounded-[0_2.5rem] sm:rounded-[0_80px]">
                 <Photo
                   src={item.image.src}
+                  blur={item.image.blur}
                   alt={item.image.alt}
                   fill
                   sizes="(min-width: 640px) 40rem, 50vw"
