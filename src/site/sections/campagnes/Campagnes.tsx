@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import { useRef, type CSSProperties } from "react";
-import { getCategory } from "@/data/categories";
 import { gsap, MOTION_OK, useGSAP } from "../../motion/gsap";
-import { RANGE_LINKS, STORE_LINKS, routes } from "../../routes";
 import { Photo } from "../../ui/Photo";
-import { CAMPAIGNS } from "./campaigns";
+import { CampaignPan } from "./CampaignPan";
+import { CAMPAIGNS, campaignLink } from "./campaigns";
 
 /** Name of the scroll timeline that follows card k's approach. */
 const rise = (k: number) => `--nid-rise-${k}`;
 
 /**
  * À l'affiche: the three campaign visuals as a pile of cards laid one on
- * the other. Each card owns a screen of scroll and sticks near the top
- * (phones and tablets: the same wide card in miniature, owning a little scroll).
+ * the other. Each card owns a screen of scroll and sticks near the top.
+ * Wide screens only: phones and tablets get the visuals whole, in a row that
+ * slides sideways while the section is held (CampaignPan).
  *
  * The landing: every card has its own timeline, from the moment it
  * enters at the bottom of the screen to the moment it settles on the pile
@@ -40,8 +40,7 @@ export function Campagnes({ blurs = {} }: { blurs?: Record<string, string | unde
       const el = stack.current;
       if (!el || (CSS.supports("timeline-scope", "--a") && CSS.supports("animation-timeline", "view()"))) return;
       const mm = gsap.matchMedia();
-      mm.add({ motion: MOTION_OK, sm: "(min-width: 640px)" }, (ctx) => {
-        if (!ctx.conditions?.motion) return;
+      mm.add(`${MOTION_OK} and (min-width: 1024px)`, () => {
         // Where the cards stick: the stack's --top (rem), as in the CSS.
         const top = parseFloat(getComputedStyle(el).getPropertyValue("--top")) * parseFloat(getComputedStyle(document.documentElement).fontSize) || 80;
         const marks = gsap.utils.toArray<HTMLElement>("[data-mark]", el);
@@ -64,15 +63,21 @@ export function Campagnes({ blurs = {} }: { blurs?: Record<string, string | unde
 
   return (
     <section id="campagnes" aria-labelledby="nid-campaigns-title" className="nid-on-white relative scroll-mt-20">
-      <div className="nid-wrap pb-10 pt-20 lg:pb-12 lg:pt-24">
-        <h2 data-reveal="" id="nid-campaigns-title" className="nid-title">
-          À l&apos;affiche
-          <span className="nid-dot">.</span>
-        </h2>
-        <p data-reveal="" className="nid-lead mt-5 max-w-[38rem] text-[var(--nid-ink-soft)]">
-          Les campagnes de nos gammes : trois univers, trois façons de goûter TANTY.
-        </p>
-      </div>
+      {/* Phones and tablets: the title is held with the row of visuals */}
+      <CampaignPan
+        blurs={blurs}
+        head={
+          <div className="nid-wrap pb-6 pt-20 lg:pb-12 lg:pt-24">
+            <h2 data-reveal="" id="nid-campaigns-title" className="nid-title">
+              À l&apos;affiche
+              <span className="nid-dot">.</span>
+            </h2>
+            <p data-reveal="" className="nid-lead mt-5 max-w-[38rem] text-[var(--nid-ink-soft)]">
+              Les campagnes de nos gammes : trois univers, trois façons de goûter TANTY.
+            </p>
+          </div>
+        }
+      />
 
       <div
         ref={stack}
@@ -91,8 +96,7 @@ export function Campagnes({ blurs = {} }: { blurs?: Record<string, string | unde
         ))}
 
         {CAMPAIGNS.map((c, k) => {
-          const range = getCategory(c.range);
-          const href = RANGE_LINKS ? routes.range(range) : STORE_LINKS ? routes.catalogue : routes.ranges;
+          const { href, label } = campaignLink(c);
           const hasNext = k < n - 1;
           return (
             <div
@@ -106,7 +110,7 @@ export function Campagnes({ blurs = {} }: { blurs?: Record<string, string | unde
                 <div data-land="" className="nid-stack-land" style={{ "--k": k, animationTimeline: rise(k) } as CSSProperties}>
                     <Link
                       href={href}
-                      aria-label={`${c.alt} Voir les produits ${range.name}.`}
+                      aria-label={label}
                       className="pointer-events-auto relative block h-[var(--card)] overflow-hidden rounded-xl bg-[var(--nid-green-deep)] shadow-lg sm:rounded-2xl sm:shadow-xl lg:rounded-3xl lg:shadow-2xl"
                     >
                       <span className="nid-skeleton absolute inset-0">

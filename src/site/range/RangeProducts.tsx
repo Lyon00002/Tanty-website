@@ -37,7 +37,8 @@ export function RangeProducts({ range }: { range: Category }) {
               <p className="nid-num mt-4 text-[var(--nid-ink-soft)]">{formatList(single)}</p>
               {priceOf(single) !== undefined && (
                 <p className="mt-4">
-                  <Price amount={priceOf(single)!} className="text-[2rem] sm:text-[2.5rem]" />
+                  {/* The size of the name above (same narrow lettering) */}
+                  <Price amount={priceOf(single)!} className="text-[clamp(1.75rem,1.35rem+1.3vw,2.4rem)]" />
                 </p>
               )}
               <Action href={routes.product(single)} className="mt-8">
