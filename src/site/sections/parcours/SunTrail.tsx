@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { gsap, MOTION_OK, useGSAP } from "../../motion/gsap";
 import type { Milestone } from "../histoire/milestones";
+import { lightStep, sunTimeline } from "./sunMotion";
 
 /**
  * Where step i stands when the path is folded into rows of `cols`, each row
@@ -18,42 +19,40 @@ function place(i: number, n: number, cols: number) {
 
 type Point = { x: number; y: number };
 
+const dist = (a: Point, b: Point) => Math.hypot(b.x - a.x, b.y - a.y);
+const xy = (p: Point) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`;
+/** The point `r` px from `from` towards `to`. */
+const toward = (from: Point, to: Point, r: number) => ({
+  x: from.x + ((to.x - from.x) / dist(from, to)) * r,
+  y: from.y + ((to.y - from.y) / dist(from, to)) * r,
+});
+
+/** The turns of the path: the suns, plus a corner where two suns are neither in one row nor in one column (down first, then across). */
+function turns(suns: Point[]) {
+  return suns.flatMap((p, i) => {
+    const a = suns[i - 1];
+    return a && Math.abs(a.x - p.x) > 1 && Math.abs(a.y - p.y) > 1 ? [{ x: a.x, y: p.y }, p] : [p];
+  });
+}
+
+/** The path through b, coming from a and going on to c: straight on, or round the turn. */
+function through(a: Point, b: Point, c: Point) {
+  const across = (p: Point, q: Point) => Math.abs(p.y - q.y) < 1;
+  if (across(a, b) === across(b, c)) return `L${xy(b)}`;
+  const r = Math.min(12, dist(a, b) / 2, dist(b, c) / 2);
+  return `L${xy(toward(b, a, r))}Q${xy(b)} ${xy(toward(b, c, r))}`;
+}
+
 /**
- * The folded path through the suns, in px: straight runs from sun to sun, a
- * corner where two suns are neither in one row nor in one column (down
- * first, then across), every turn rounded. `at` is how far along the path
- * each sun stands (0 to 1).
+ * The folded path through the suns, in px: straight runs from sun to sun,
+ * every turn rounded. `at` is how far along the path each sun stands (0 to 1).
  */
 function trail(suns: Point[]) {
-  const v: Point[] = [];
-  const index: number[] = [];
-  suns.forEach((p, i) => {
-    const a = v[v.length - 1];
-    if (a && Math.abs(a.x - p.x) > 1 && Math.abs(a.y - p.y) > 1) v.push({ x: a.x, y: p.y });
-    index[i] = v.length;
-    v.push(p);
-  });
-  const dist = (a: Point, b: Point) => Math.hypot(b.x - a.x, b.y - a.y);
-  const len = [0];
-  for (let k = 1; k < v.length; k++) len[k] = len[k - 1] + dist(v[k - 1], v[k]);
+  const v = turns(suns);
+  const len = v.map((_, k) => v.slice(1, k + 1).reduce((sum, p, j) => sum + dist(v[j], p), 0));
   const total = len[len.length - 1] || 1;
-
-  const f = (n: number) => n.toFixed(1);
-  let d = `M${f(v[0].x)} ${f(v[0].y)}`;
-  for (let k = 1; k < v.length - 1; k++) {
-    const [a, b, c] = [v[k - 1], v[k], v[k + 1]];
-    const across = (p: Point, q: Point) => Math.abs(p.y - q.y) < 1;
-    if (across(a, b) === across(b, c)) {
-      d += `L${f(b.x)} ${f(b.y)}`;
-      continue;
-    }
-    const r = Math.min(12, dist(a, b) / 2, dist(b, c) / 2);
-    const from = { x: b.x + ((a.x - b.x) / dist(a, b)) * r, y: b.y + ((a.y - b.y) / dist(a, b)) * r };
-    const to = { x: b.x + ((c.x - b.x) / dist(b, c)) * r, y: b.y + ((c.y - b.y) / dist(b, c)) * r };
-    d += `L${f(from.x)} ${f(from.y)}Q${f(b.x)} ${f(b.y)} ${f(to.x)} ${f(to.y)}`;
-  }
-  if (v.length > 1) d += `L${f(v[v.length - 1].x)} ${f(v[v.length - 1].y)}`;
-  return { d, at: index.map((k) => len[k] / total) };
+  const d = `M${xy(v[0])}${v.slice(1, -1).map((b, k) => through(v[k], b, v[k + 2])).join("")}L${xy(v[v.length - 1])}`;
+  return { d, at: suns.map((p) => len[v.indexOf(p)] / total) };
 }
 
 /**
@@ -69,7 +68,7 @@ function trail(suns: Point[]) {
 export function SunTrail({ items }: { items: Milestone[] }) {
   const root = useRef<HTMLOListElement>(null);
   const mask = `nid-trail-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  const [geo, setGeo] = useState<{ w: number; h: number; d: string; at: number[] } | null>(null);
+  const [geo, setGeo] = useState<{ key: string; w: number; h: number; d: string; at: number[] } | null>(null);
   const n = items.length;
 
   // The path follows the suns where the layout puts them (layout offsets, so the suns' own motion does not move it).
@@ -83,7 +82,8 @@ export function SunTrail({ items }: { items: Milestone[] }) {
         y: s.offsetTop + s.offsetHeight / 2,
       }));
       const next = { w: el.offsetWidth, h: el.offsetHeight, ...trail(suns) };
-      setGeo((g) => (g && g.d === next.d && g.w === next.w && g.h === next.h ? g : next));
+      const key = `${next.w} ${next.h} ${next.d}`;
+      setGeo((g) => (g?.key === key ? g : { key, ...next }));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -99,22 +99,13 @@ export function SunTrail({ items }: { items: Milestone[] }) {
         const el = root.current;
         if (!el) return;
         // From the moment the steps enter the screen until the last one is well inside it.
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom 80%", scrub: 0.6 },
-        });
+        const tl = sunTimeline(el, "top bottom", "bottom 80%");
         // The ribbon is uncovered along its real length (Chrome does not scale the dash offset by pathLength).
         const draw = el.querySelector<SVGPathElement>("[data-draw]");
         const length = draw?.getTotalLength() ?? 0;
         tl.fromTo(draw, { strokeDasharray: `${length} ${length}`, strokeDashoffset: length }, { strokeDashoffset: 0, duration: 1 }, 0);
         el.querySelectorAll("[data-step]").forEach((step, i) => {
-          const at = Math.min(0.92, geo.at[i] ?? 0);
-          tl.fromTo(step.querySelector("[data-sun]"), { scale: 0.3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.06, ease: "back.out(1.7)" }, at).fromTo(
-            step.querySelectorAll("[data-say]"),
-            { y: 8, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1, duration: 0.07, ease: "power2.out" },
-            at + 0.015,
-          );
+          lightStep(tl, step.querySelector("[data-sun]"), step.querySelectorAll("[data-say]"), Math.min(0.92, geo.at[i] ?? 0));
         });
       });
     },

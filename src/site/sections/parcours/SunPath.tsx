@@ -3,6 +3,7 @@
 import { useRef, type CSSProperties } from "react";
 import { gsap, MOTION_OK, useGSAP } from "../../motion/gsap";
 import type { Milestone } from "../histoire/milestones";
+import { lightStep, sunTimeline } from "./sunMotion";
 import { SunTrail } from "./SunTrail";
 
 /*
@@ -41,10 +42,7 @@ export function SunPath({ items }: { items: Milestone[] }) {
         if (!el) return;
         // The arc draws itself with the scroll (both ways, so at every visit), from the moment
         // the path enters the screen until its top reaches 45 % of it.
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: { trigger: el, start: "top bottom", end: "top 45%", scrub: 0.6 },
-        });
+        const tl = sunTimeline(el, "top bottom", "top 45%");
         tl.fromTo(el.querySelector("[data-arc]"), { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1 }, 0);
         // Each sun rises when the path reaches it, its text just after.
         const box = el.getBoundingClientRect();
@@ -52,13 +50,7 @@ export function SunPath({ items }: { items: Milestone[] }) {
         el.querySelectorAll("[data-sun]").forEach((sun, i) => {
           const r = sun.getBoundingClientRect();
           const along = (r.left + r.width / 2 - box.left) / box.width;
-          const at = Math.min(0.9, Math.max(0, along));
-          tl.fromTo(sun, { y: 26, scale: 0.4, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 0.07, ease: "back.out(1.7)" }, at).fromTo(
-            says[i],
-            { y: 12, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1, duration: 0.08, ease: "power2.out" },
-            at + 0.02,
-          );
+          lightStep(tl, sun, says[i], Math.min(0.9, Math.max(0, along)), 26);
         });
       });
     },
