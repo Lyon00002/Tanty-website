@@ -8,12 +8,15 @@ import { Breadcrumbs } from "../range/Breadcrumbs";
 import { RANGE_LINKS, routes } from "../routes";
 import { FormatOrder } from "./FormatOrder";
 import { ProductStage } from "./ProductStage";
+import { ProductTitle } from "./ProductTitle";
 
 /**
- * Product page body: the product's view (its photos, or
- * its placeholder), held in view on wide screens; beside it, the range, the
- * name, the verified facts and the WhatsApp order with the format chosen.
- * The media column is where the scroll-exploded 3D model will live later.
+ * Product page body: the product's view (its photos, or its placeholder);
+ * beside it what one buys by (the name, the format, its price, the WhatsApp
+ * order), and the description and verified facts: on wide screens all in the
+ * column beside the held photo, on phones and tablets below photo and order,
+ * across the page. The media column is where the scroll-exploded 3D model
+ * will live later.
  */
 export function ProductDetail({ product }: { product: Product }) {
   const range = getCategory(product.category);
@@ -30,53 +33,49 @@ export function ProductDetail({ product }: { product: Product }) {
             { label: product.name },
           ]}
         />
-        {/* Phones: photo and name side by side, the details below; desktop: photo left (held), all the rest right */}
-        <div className="mt-5 grid grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] items-start gap-x-4 gap-y-6 lg:mt-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-20 lg:gap-y-0">
-          <div className="lg:sticky lg:top-24 lg:row-span-2">
+        {/* Where each part stands, by screen size: world.css .nid-sheet */}
+        <div className="nid-sheet mt-5 lg:mt-10">
+          <div className="nid-sheet-photo lg:sticky lg:top-24">
             <ProductStage photos={getProductPhotos(product)} packaging={primaryPackaging(product)} name={product.name} />
           </div>
 
-          <div className="lg:pt-8">
-            <h1 data-reveal="" id="nid-product-title" className="nid-title">
-              {product.name}
-            </h1>
-            {product.description && (
-              <p data-reveal="" className="nid-lead mt-2.5 lg:mt-5">
-                {product.description}
-              </p>
-            )}
-          </div>
-
-          <div className="col-span-2 lg:col-span-1 lg:col-start-2">
-            {/* The range first (its page, or its place in the catalogue), then the verified facts. */}
-            <dl data-reveal="" className="grid grid-cols-2 gap-x-5 gap-y-4 border-t border-[var(--nid-ink)]/10 pt-5 text-[0.875rem] sm:gap-x-10 sm:gap-y-5 sm:pt-6 sm:text-base lg:mt-9">
-              <div>
-                <dt className="text-[0.8125rem] text-[var(--nid-ink-soft)] sm:text-sm">Gamme</dt>
-                <dd className="mt-1 font-semibold leading-snug">
-                  <Link href={rangeHref} className="nid-link text-[var(--nid-green-deep)]">
-                    {product.line}
-                  </Link>
-                </dd>
-              </div>
-              {product.facts?.map((f) => (
-                <div key={f.label}>
-                  <dt className="text-[0.8125rem] text-[var(--nid-ink-soft)] sm:text-sm">{f.label}</dt>
-                  <dd className="mt-1 font-semibold leading-snug">{f.value}</dd>
-                </div>
-              ))}
-            </dl>
-
-            <div data-reveal="" className="mt-7 sm:mt-10">
-              <FormatOrder product={product} />
-            </div>
-            <p data-reveal="" className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.875rem] text-[var(--nid-ink-soft)] sm:mt-8 sm:text-base">
-              <Phone aria-hidden="true" className="size-4 text-[var(--nid-green)]" />
-              Service client&nbsp;:
-              <a href={`tel:${company.phone.e164}`} className="nid-link nid-num text-[var(--nid-ink)]">
-                {company.phone.display}
-              </a>
+          <h1 data-reveal="" id="nid-product-title" className="nid-sheet-title nid-title nid-title-compact lg:pt-4">
+            <ProductTitle product={product} />
+          </h1>
+          {product.description && (
+            <p data-reveal="" className="nid-sheet-desc nid-lead mt-6 lg:mt-4">
+              {product.description}
             </p>
+          )}
+
+          {/* The range first (its page, or its place in the catalogue), then the verified facts. */}
+          <dl data-reveal="" className="nid-sheet-facts mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-[var(--nid-ink)]/10 pt-4 text-[0.8125rem] sm:gap-x-10 sm:gap-y-4 sm:pt-5 sm:text-base lg:mt-7">
+            <div>
+              <dt className="text-[0.75rem] font-semibold text-[var(--nid-green)] sm:text-sm">Gamme</dt>
+              <dd className="mt-0.5 font-semibold leading-snug sm:mt-1">
+                <Link href={rangeHref} className="nid-link text-[var(--nid-green-deep)]">
+                  {product.line}
+                </Link>
+              </dd>
+            </div>
+            {product.facts?.map((f) => (
+              <div key={f.label}>
+                <dt className="text-[0.75rem] font-semibold text-[var(--nid-green)] sm:text-sm">{f.label}</dt>
+                <dd className="mt-0.5 font-semibold leading-snug sm:mt-1">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div data-reveal="" className="nid-sheet-order mt-3 lg:mt-8">
+            <FormatOrder product={product} />
           </div>
+          <p data-reveal="" className="nid-sheet-service mt-5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[0.8125rem] text-[var(--nid-ink-soft)] sm:gap-x-2 sm:text-base lg:mt-6">
+            <Phone aria-hidden="true" className="size-4 text-[var(--nid-green)]" />
+            Service client&nbsp;:
+            <a href={`tel:${company.phone.e164}`} className="nid-link nid-num text-[var(--nid-ink)]">
+              {company.phone.display}
+            </a>
+          </p>
         </div>
       </div>
     </section>

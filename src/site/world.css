@@ -710,11 +710,81 @@ a:focus-visible > .nid-bubble {
     background-color 0.25s var(--nid-ease-out);
 }
 
-/* A lead in a narrow column on phones (the range band beside its emblem): one step smaller. */
+/* Product sheet (ProductDetail). Phones and tablets: the photo and, beside
+   it, what one buys by (name, then format, price and order), as on desktop,
+   both sides about as tall; the description and facts below, across the page,
+   where long text reads well (all of it in the narrow column left the space
+   under the photo empty: user feedback). Desktop: the photo held on the left,
+   everything else in the column beside it, the photos and their small
+   previews all in the first screen on arrival. */
+.nid-sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "photo title"
+    "photo order"
+    "desc desc"
+    "facts facts"
+    "service service";
+  column-gap: 1rem;
+  align-items: start;
+}
+
+.nid-sheet-photo {
+  grid-area: photo;
+}
+
+.nid-sheet-title {
+  grid-area: title;
+}
+
+.nid-sheet-desc {
+  grid-area: desc;
+}
+
+.nid-sheet-facts {
+  grid-area: facts;
+}
+
+.nid-sheet-order {
+  grid-area: order;
+}
+
+.nid-sheet-service {
+  grid-area: service;
+}
+
+@media (min-width: 1024px) {
+  .nid-sheet {
+    /* The large photo (4:5) as tall as the first screen allows (17rem: the header, the
+       breadcrumb and a little air), its small ones in a column beside it (ProductStage);
+       the photos' column as wide as they are. */
+    --stage-photo: clamp(16rem, calc((100svh - 17rem) * 0.8), 34rem);
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-areas:
+      "photo title"
+      "photo desc"
+      "photo facts"
+      "photo order"
+      "photo service";
+    /* Wide between the photos and the details (user request), growing with the screen. */
+    column-gap: clamp(5rem, 9vw, 9rem);
+  }
+}
+
+/* A title or lead in a narrow column on phones (the range band beside its emblem,
+   the product sheet beside its photo): smaller. */
 @media (max-width: 639.98px) {
   .nid-lead.nid-lead-compact {
     font-size: 0.8125rem;
     line-height: 1.5;
+  }
+
+  .nid-title.nid-title-compact {
+    font-size: 1.375rem;
+    line-height: 1.08;
   }
 }
 
@@ -746,40 +816,81 @@ a:focus-visible > .nid-bubble {
    previous one, so the edges of the pile show. The pile is pulled up by
    the empty half-band above the first card, so that card arrives right
    under the section's text instead of half a screen lower. */
+/* Wide screens only (phones and tablets get the sliding row, .nid-pan below).
+   Each card owns a screen of scroll and sticks under the 64 px bar + air. */
 .nid-stack {
-  /* Phones and tablets: the card as wide as the content and as tall (doubled from 2:1, user request), owning little scroll. */
-  --card: calc(100vw - 2 * var(--nid-gutter));
-  --h: calc(var(--card) + 5rem);
-  /* Where the cards stick: right under the sticky header (80 px on phones, 88 on tablets, the 64 px bar + air on desktop). */
+  --h: calc(100svh - 5rem);
+  --card: min(40rem, calc(100svh - 11rem));
   --top: 5rem;
-  /* Phones: a clear step between the piled cards (8 px was lost on cards this tall). */
-  --step: 18px;
+  --step: 24px;
   margin-top: calc((var(--h) - var(--card)) / -2);
   overflow-x: clip;
 }
 
-/* Phones: twice as tall as wide (user request); the three piled cards, their steps
-   included, always fit on the screen under the header. */
-@media (max-width: 639.98px) {
+@media (max-width: 1023.98px) {
   .nid-stack {
-    --card: min(calc((100vw - 2 * var(--nid-gutter)) * 2), calc(100svh - 5rem - 1.5rem - 2 * var(--step) - 1rem));
-    --h: calc(var(--card) + 3rem);
+    display: none;
   }
+}
+
+/* À l'affiche on phones and tablets (CampaignPan): the visuals whole, in a
+   row (each card 86 % of the content width, so the next one peeks in). By
+   default the row is swiped by hand. With scripts and motion welcome, the
+   scroll slides it from the moment it comes into the screen, and the title
+   and row end held under the header (sticky; 80 px on phones, 88 on tablets,
+   the title's top padding slipping under it) while the last card arrives.
+   The hold is short (the run below, under a fifth of the screen): a hold as
+   long as the slide left a void under the short row that hid the next
+   section; this way its title stays in view below (user feedback). */
+.nid-pan {
+  --top: 5rem;
+  --pan-w: calc((100vw - 2 * var(--nid-gutter)) * 0.86);
+  --pan-gap: 0.75rem;
 }
 
 @media (min-width: 640px) {
-  .nid-stack {
+  .nid-pan {
     --top: 5.5rem;
-    --step: 12px;
+    --pan-gap: 1rem;
   }
 }
 
-@media (min-width: 1024px) {
-  .nid-stack {
-    --h: calc(100svh - 5rem);
-    --card: min(40rem, calc(100svh - 11rem));
-    --top: 5rem;
-    --step: 24px;
+.nid-pan-card {
+  width: var(--pan-w);
+  scroll-snap-align: start;
+}
+
+.nid-pan-view {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--nid-gutter);
+  /* Room for the cards' shadow inside the clipped row. */
+  padding: 0.5rem var(--nid-gutter) 1.25rem;
+}
+
+.nid-pan-marks {
+  display: none;
+}
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (max-width: 1023.98px) {
+  .nid-pan-frame {
+    position: sticky;
+    top: calc(var(--top) - 3.5rem);
+  }
+
+  /* Sticky stays inside its parent's content box: the run is a block, not padding. */
+  .nid-pan-run {
+    height: clamp(6.25rem, 18svh, 12.5rem);
+  }
+
+  /* The row is moved by the scroll, not swiped (clip: no scrolling box a focused card could shift). */
+  .nid-pan-view {
+    overflow-x: clip;
+    scroll-snap-type: none;
+  }
+
+  .nid-pan-marks {
+    display: flex;
   }
 }
 

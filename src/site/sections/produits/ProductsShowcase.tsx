@@ -186,7 +186,8 @@ export function ProductsShowcase({
                 <span className="nid-num mt-1 hidden text-sm leading-snug text-[var(--nid-ink-soft)] sm:block">{item.formats}</span>
                 {item.price !== undefined && (
                   <span className="mt-1 block">
-                    <Price amount={item.price} className="text-[1rem] sm:text-[1.25rem]" />
+                    {/* As large to the eye as the name (0.9375rem, then 1.125rem): the narrow figures take a fifth more */}
+                    <Price amount={item.price} className="text-[1.125rem] sm:text-[1.375rem]" />
                   </span>
                 )}
               </span>
